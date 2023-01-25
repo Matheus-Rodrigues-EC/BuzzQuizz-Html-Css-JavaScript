@@ -63,3 +63,6 @@ input::placeholder {
 input:focus {
     outline: none;
 } 
+.escondido {
+    display: none;
+}
