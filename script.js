@@ -38,7 +38,8 @@ function LoadQuizzes(Response){
     
     let Quizz = '';
     for(let i = 0; i < Quizzes.length; i++){
-        Quizz =    `<li class="QuizzBox">
+        Quizz =    `<li class="QuizzBox" style="background-image: url(${Quizzes[i].image})">
+                        <h3 class="QuizzTitle">${Quizzes[i].title}</h3>
                     </li>`
 
         QuizzRow.innerHTML += Quizz;
