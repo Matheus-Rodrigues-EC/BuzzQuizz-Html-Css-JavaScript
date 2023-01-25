@@ -17,9 +17,12 @@
     font-size: 37px;
     line-height: 43px;
 }
+.tela1 {
+    width: 1051px;
+    margin: 0 auto;
+}
 .criar-quizz {
     background-color: #fafafa;
-    width: 1051px;
     height: 181px;
     border: 1px dashed #d5d5d5;
     border-radius: 5px;
@@ -55,6 +58,36 @@
     align-items: center;
     margin: 0 451px;
     margin-top: 20px;
+}
+.tela1-com-quizz{
+    width: 1081px;
+    margin: 0 auto;
+    margin-top: 70px;
+    display: flex;
+}
+.tela1-com-quizz h2 {
+    color: #000000;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+.tela1-com-quizz button {
+    width: 31px;
+    height: 30px;
+    margin-left: 17px;
+    background-color: rgba(236, 54, 45, 1);
+    border: 1px solid rgba(236, 54, 45, 1);
+    border-radius: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.tela1-com-quizz button img {
+    width: 13px;
+    height: auto;
 }
 .escondido {
     display: none;
