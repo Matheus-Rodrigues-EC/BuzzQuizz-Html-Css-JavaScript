@@ -24,3 +24,25 @@ function prosseguirParaPerguntas(){
         alert('Por favor! Preencha os dados corretamente');
     }
 }
+
+const GetQuizzesURL = 'https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes';
+let ListQuizzes = axios.get(GetQuizzesURL);
+ListQuizzes.then(LoadQuizzes);
+ListQuizzes.catch(erro => console.log(erro.response.status));
+
+
+function LoadQuizzes(Response){
+    const QuizzRow = document.querySelector('.QuizzRow');
+    let Quizzes = Response.data;
+    console.log(Quizzes);
+    
+    let Quizz = '';
+    for(let i = 0; i < Quizzes.length; i++){
+        Quizz =    `<li class="QuizzBox">
+                    </li>`
+
+        QuizzRow.innerHTML += Quizz;
+        Quizz = '';
+
+    }
+}

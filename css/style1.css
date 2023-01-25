@@ -92,3 +92,33 @@
 .escondido {
     display: none;
 }
+
+/* Inicio Listagem de Quizzes */
+
+.ListQuizzes{
+    display: flex;
+    margin: 50px auto;
+    width: 1050px;
+    height: 377px;
+    overflow-y: scroll;
+}
+
+.ListQuizzes::-webkit-scrollbar{
+    display: none;
+}
+
+.QuizzRow{
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.QuizzBox{
+    width: 340px;
+    height: 181px;
+    border-radius: 5px;
+    background-color: #000000;
+}
+
+
+/* Fim Listagem de Quizzes */
