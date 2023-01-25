@@ -50,7 +50,12 @@
     line-height: 25px;
     border: 1px dashed rgba(236, 54, 45, 1);
     border-radius: 50px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: 0 451px;
     margin-top: 20px;
+}
+.escondido {
+    display: none;
 }

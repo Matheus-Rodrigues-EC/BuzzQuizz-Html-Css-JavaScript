@@ -1,0 +1,65 @@
+.tela3 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: space-around;
+}
+
+.tela3 h2 {
+    color: #000000;
+    font-weight: bold;
+    font-size: 23px;
+    line-height: 27px;
+    margin: 0 auto;
+    margin-top: 71px;
+}
+.tela3 .info-quizz{
+    background-color: rgba(255, 255, 255, 1);
+    width: 600px;
+    height: 256px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
+    margin: 0 auto;
+    margin-top: 27px;
+}
+
+.tela3 button {
+    width: 370px;
+    height: 54px;
+    background-color: rgba(236, 54, 45, 1);
+    color: rgba(255, 245, 244, 1);
+    font-weight: 400;
+    font-size: 21px;
+    line-height: 25px;
+    text-align: center;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 1);
+    margin: 0 auto;
+    margin-top: 85px;
+}
+.info-quizz{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: space-between;
+}
+.info-quizz input {
+    width: 564px;
+    height: 46px;
+    border-radius: 5px;
+    border: 1px solid rgba(209, 209, 209, 1);
+    margin: 4px auto;
+}
+input::placeholder {
+    color: #bababa;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 22px;
+    
+    position: absolute;
+    left: 23px;
+    top: 13px;
+}
+input:focus {
+    outline: none;
+} 
