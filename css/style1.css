@@ -2,7 +2,17 @@
     font-family: "Roboto", sans-serif;
     background-color: #e5e5e5;
 }
+
+.container{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 1440px;
+    height: auto;
+}
+
 .top {
+    width: 1440px;
     background-color: rgba(236, 54, 45, 1);
     height: 69px;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -10,6 +20,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: -webkit-sticky;
 }
 .top h1 {
     color: rgba(255, 255, 255, 1);
@@ -18,7 +29,7 @@
     line-height: 43px;
 }
 .tela1 {
-    width: 1051px;
+    width: 1440px;
     margin: 0 auto;
 }
 .criar-quizz {
@@ -31,7 +42,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: space-around;
+    align-items: center;
 }
 .criar-quizz h3 {
     color: #b9b9b9;
@@ -100,6 +111,7 @@
     margin: 50px auto;
     width: 1050px;
     height: 377px;
+    justify-content: space-around;
     overflow-y: scroll;
 }
 
@@ -118,6 +130,15 @@
     height: 181px;
     border-radius: 5px;
     background: no-repeat center;
+    position: relative;
+}
+.Layer{
+    width: 340px;
+    height: 90px;
+    position: absolute;
+    bottom: 0;
+    border-radius: 5px;
+    background: linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 1));
 }
 
 .QuizzTitle{
@@ -126,10 +147,85 @@
     font-size: 19px;
     font-weight: 400;
     color: #FFFFFF;
-    position: relative;
-    top: 120px;
-    margin: auto auto 5px 20px;
+    position: absolute;
+    left: 20px;
+    bottom: 15px;
+}
+/* Fim Listagem de Quizzes */
+
+/* Inicio Exibir quizz selecionado*/
+.Tela2{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }
 
+.ImageTopQuizz{
+    width: 1440px;
+    height: 227px;
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: auto;
+}
 
-/* Fim Listagem de Quizzes */
+.Obscure{
+    width: inherit;
+    height: 227px;
+    background-color: #000000;
+    opacity: 0.6;
+}
+
+.CurrentQuizzTitle{
+    width: 1440px;;
+    height: 54px;
+    display: flex;
+    font-family: "Roboto", sans-serif;
+    font-size: 39px;
+    font-weight: 400;
+    color: #FFFFFF;
+    position: absolute;
+    left: 0;
+    justify-content: center;
+    top: 35%;
+}
+
+.QuestionBox{
+    width: 759px;
+    margin: 42px auto 0 auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.QuestionTitleBox{
+    width: 688px;
+    height: 138px;
+    background-color: #434CA0;
+    position: relative;
+}
+.QuestionTitle{
+    font-family: "Roboto", sans-serif;
+    font-size: 23px;
+    font-weight: 700;
+    color: #FFFFFF;
+    position: absolute;
+    top: 40%;
+    left: 35%;
+}
+
+.AnswersBox{
+    display: flex;
+    width: 330px;
+    height: 175px;
+    margin-top: 20px;
+    gap: 15px;
+    box-sizing: content-box;
+}
+
+.AnswersImage{
+    width: 330px;
+    height: 175px;
+}
+/* Fim Exibir quizz selecionado*/
