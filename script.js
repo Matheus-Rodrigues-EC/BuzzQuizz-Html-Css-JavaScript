@@ -8,22 +8,85 @@ function criarMeuQuizz(){
 
     quizz2.classList.add('escondido');
 }
+//Varáveis globais para serem usados nas descrições/informações do Quizz depois
 let tituloQuizz = "";
 let imagemQuizz = "";
-let perguntasQuizz = "";
-let nivelQuizz = "";
+let perguntasQuizz = 0;
+let nivelQuizz = 0;
+
 function prosseguirParaPerguntas(){
     tituloQuizz = document.querySelector('.novo-titulo-quizz').value;
     imagemQuizz = document.querySelector('.nova-imagem-quizz').value;
     perguntasQuizz = Number(document.querySelector('.nova-pergunta-quizz').value);
     nivelQuizz = Number(document.querySelector('.novo-nivel-quizz').value);
-    
-    if((tituloQuizz.length >= 20 && tituloQuizz.length <= 65) || imagemQuizz === URL || perguntasQuizz >= 3|| nivelQuizz >= 2){
-        //adcionar a página para a criação das perguntas
+
+    if((tituloQuizz.length >= 20 && tituloQuizz.length <= 65) && perguntasQuizz >= 3 && nivelQuizz >= 2){
+        //adicionar função para a criação das perguntas
+        //Quando clicar no botão de "prosseguir para níveis" chamar função createLevels()
+        alert("Oi");
     } else {
         alert('Por favor! Preencha os dados corretamente');
     }
 }
+//Colocando na tela a quantidade de níveis pedidos
+function createLevels(){
+    const searchNiveis = document.querySelector('.niveis');
+    
+    for(let i = 2; i <= nivelQuizz; i++){
+        let template =`<div class="proximo-nivel">
+            <h3>Nível ${i}</h3>
+            <img src="img/Vector (2).png" onclick="openNextLevel()">
+        </div>`;
+
+        searchNiveis.innerHTML = searchNiveis.innerHTML + template;
+    }
+}
+//Fim dos niveis pedidos
+// Clicando no icone do lápis e abrindo os inputs para informação dos níveis
+function openNextLevel(){
+    const openNivel = document.querySelectorAll('.proximo-nivel');
+    for(let i = 0; i < openNivel.length; i++){
+        openNivel[i].classList.remove('proximo-nivel');
+        openNivel[i].innerHTML = '';
+    }
+    const searchInfoNiveis = document.querySelector('.niveis');
+    
+    for(let i = 2; i <= nivelQuizz; i++){
+        let template2 =`<div class="nivel">
+            <h3>Nível ${i}</h3>
+            <input class="titulo-nivel-${i}" type="text" placeholder="Título do nível">
+            <input class="acerto-nivel-${i}" type="text" placeholder="% de acerto mínima">
+            <input class="img-nivel-${i}" type="url" placeholder="URL da imagem do nível">
+            <input class="descricao-nivel-${i}" type="text" placeholder="Descrição do nível">
+        </div>`;
+
+        searchInfoNiveis.innerHTML = searchInfoNiveis.innerHTML + template2;
+
+    }
+}
+//Fim dos inputs dos niveis
+// Validação de dados colocados nos inputs do quizz
+let tituloNivel = "";
+let percentualNivel= 0;
+let imagemNivel = "";
+let descricaoNivel = "";
+function proceedToFinishQuizz(){
+
+    tituloNivel = document.querySelector('.titulo-nivel-1').value;
+    percentualNivel = Number(document.querySelector('.acerto-nivel-1').value);
+    imagemNivel = document.querySelector('.img-nivel-1').value;
+    descricaoNivel = document.querySelector('.descricao-nivel-1').value;
+   
+    if(tituloNivel.length >= 10 && (percentualNivel >= 0 && percentualNivel <= 100) && descricaoNivel.length >= 30){
+        alert("Oi");
+        //adicionar função para a página final
+
+    } else {
+        alert('Por favor! Preencha os dados corretamente');
+    }
+    
+}
+//Fim da validação
 
 // Inicio Buscar Lista de Quizzes
     const GetQuizzesURL = 'https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/';
