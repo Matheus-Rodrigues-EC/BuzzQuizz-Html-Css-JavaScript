@@ -23,7 +23,6 @@ function prosseguirParaPerguntas() {
     if ((tituloQuizz.length >= 20 && tituloQuizz.length <= 65) && perguntasQuizz >= 3 && nivelQuizz >= 2) {
         //adicionar função para a criação das perguntas
         //Quando clicar no botão de "prosseguir para níveis" chamar função createLevels()
-        alert("Oi");
     } else {
         alert('Por favor! Preencha os dados corretamente');
     }
@@ -43,26 +42,22 @@ function createLevels() {
 }
 //Fim dos niveis pedidos
 // Clicando no icone do lápis e abrindo os inputs para informação dos níveis
+let i = 2;
 function openNextLevel() {
-    const openNivel = document.querySelectorAll('.proximo-nivel');
-    for (let i = 0; i < openNivel.length; i++) {
-        openNivel[i].classList.remove('proximo-nivel');
-        openNivel[i].innerHTML = '';
-    }
-    const searchInfoNiveis = document.querySelector('.niveis');
 
-    for (let i = 2; i <= nivelQuizz; i++) {
-        let template2 = `<div class="nivel">
-            <h3>Nível ${i}</h3>
-            <input class="titulo-nivel-${i}" type="text" placeholder="Título do nível">
-            <input class="acerto-nivel-${i}" type="text" placeholder="% de acerto mínima">
-            <input class="img-nivel-${i}" type="url" placeholder="URL da imagem do nível">
-            <input class="descricao-nivel-${i}" type="text" placeholder="Descrição do nível">
-        </div>`;
+    let template2 = `<div class="nivel">
+        <h3>Nível ${i}</h3>
+        <input class="titulo-nivel-${i}" type="text" placeholder="Título do nível">
+        <input class="acerto-nivel-${i}" type="text" placeholder="% de acerto mínima">
+        <input class="img-nivel-${i}" type="url" placeholder="URL da imagem do nível">
+        <input class="descricao-nivel-${i}" type="text" placeholder="Descrição do nível">
+    </div>`;
 
-        searchInfoNiveis.innerHTML = searchInfoNiveis.innerHTML + template2;
+    i += 1;
 
-    }
+    const openNivel = document.querySelector('.proximo-nivel');
+    openNivel.classList.remove('proximo-nivel');
+    openNivel.innerHTML = template2;
 }
 //Fim dos inputs dos niveis
 // Validação de dados colocados nos inputs do quizz
@@ -70,21 +65,35 @@ let tituloNivel = "";
 let percentualNivel = 0;
 let imagemNivel = "";
 let descricaoNivel = "";
+let arrayTitulo = [];
+let arrayPercentual = [];
+let arrayImg = [];
+let arrayDescricao = [];
+
 function proceedToFinishQuizz() {
+    let contador = 0;
+    for(let indice = 1; indice <= nivelQuizz; indice++){
+        tituloNivel = document.querySelector(`.titulo-nivel-${indice}`).value;
+        percentualNivel = Number(document.querySelector(`.acerto-nivel-${indice}`).value);
+        imagemNivel = document.querySelector(`.img-nivel-${indice}`).value;
+        descricaoNivel = document.querySelector(`.descricao-nivel-${indice}`).value;
 
-    tituloNivel = document.querySelector('.titulo-nivel-1').value;
-    percentualNivel = Number(document.querySelector('.acerto-nivel-1').value);
-    imagemNivel = document.querySelector('.img-nivel-1').value;
-    descricaoNivel = document.querySelector('.descricao-nivel-1').value;
+        if (tituloNivel.length >= 10 && (percentualNivel >= 0 && percentualNivel <= 100) && descricaoNivel.length >= 30) {
+            contador += 1;
+            console.log(contador);
+            arrayTitulo.push(tituloNivel);
+            arrayPercentual.push(percentualNivel)
+            arrayImg.push(imagemNivel); 
+            arrayDescricao.push(descricaoNivel);
 
-    if (tituloNivel.length >= 10 && (percentualNivel >= 0 && percentualNivel <= 100) && descricaoNivel.length >= 30) {
-        alert("Oi");
-        //adicionar função para a página final
-
-    } else {
-        alert('Por favor! Preencha os dados corretamente');
+        } else {
+            contador = 0;
+            alert('Por favor! Preencha os dados corretamente');
+        }
     }
-
+    if(contador === nivelQuizz){
+        //Função para enviar quizz(get.post)
+    }
 }
 //Fim da validação
 
