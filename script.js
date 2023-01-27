@@ -1,7 +1,7 @@
 const quizz = document.querySelector('.tela1');
 const criarQuizz = document.querySelector('.tela3');
 const quizz2 = document.querySelector('.tela1-com-quizz');
-function criarMeuQuizz(){
+function criarMeuQuizz() {
     quizz.classList.add('escondido');
 
     criarQuizz.classList.remove('escondido');
@@ -14,13 +14,13 @@ let imagemQuizz = "";
 let perguntasQuizz = 0;
 let nivelQuizz = 0;
 
-function prosseguirParaPerguntas(){
+function prosseguirParaPerguntas() {
     tituloQuizz = document.querySelector('.novo-titulo-quizz').value;
     imagemQuizz = document.querySelector('.nova-imagem-quizz').value;
     perguntasQuizz = Number(document.querySelector('.nova-pergunta-quizz').value);
     nivelQuizz = Number(document.querySelector('.novo-nivel-quizz').value);
 
-    if((tituloQuizz.length >= 20 && tituloQuizz.length <= 65) && perguntasQuizz >= 3 && nivelQuizz >= 2){
+    if ((tituloQuizz.length >= 20 && tituloQuizz.length <= 65) && perguntasQuizz >= 3 && nivelQuizz >= 2) {
         //adicionar função para a criação das perguntas
         //Quando clicar no botão de "prosseguir para níveis" chamar função createLevels()
         alert("Oi");
@@ -29,11 +29,11 @@ function prosseguirParaPerguntas(){
     }
 }
 //Colocando na tela a quantidade de níveis pedidos
-function createLevels(){
+function createLevels() {
     const searchNiveis = document.querySelector('.niveis');
-    
-    for(let i = 2; i <= nivelQuizz; i++){
-        let template =`<div class="proximo-nivel">
+
+    for (let i = 2; i <= nivelQuizz; i++) {
+        let template = `<div class="proximo-nivel">
             <h3>Nível ${i}</h3>
             <img src="img/Vector (2).png" onclick="openNextLevel()">
         </div>`;
@@ -43,16 +43,16 @@ function createLevels(){
 }
 //Fim dos niveis pedidos
 // Clicando no icone do lápis e abrindo os inputs para informação dos níveis
-function openNextLevel(){
+function openNextLevel() {
     const openNivel = document.querySelectorAll('.proximo-nivel');
-    for(let i = 0; i < openNivel.length; i++){
+    for (let i = 0; i < openNivel.length; i++) {
         openNivel[i].classList.remove('proximo-nivel');
         openNivel[i].innerHTML = '';
     }
     const searchInfoNiveis = document.querySelector('.niveis');
-    
-    for(let i = 2; i <= nivelQuizz; i++){
-        let template2 =`<div class="nivel">
+
+    for (let i = 2; i <= nivelQuizz; i++) {
+        let template2 = `<div class="nivel">
             <h3>Nível ${i}</h3>
             <input class="titulo-nivel-${i}" type="text" placeholder="Título do nível">
             <input class="acerto-nivel-${i}" type="text" placeholder="% de acerto mínima">
@@ -67,43 +67,43 @@ function openNextLevel(){
 //Fim dos inputs dos niveis
 // Validação de dados colocados nos inputs do quizz
 let tituloNivel = "";
-let percentualNivel= 0;
+let percentualNivel = 0;
 let imagemNivel = "";
 let descricaoNivel = "";
-function proceedToFinishQuizz(){
+function proceedToFinishQuizz() {
 
     tituloNivel = document.querySelector('.titulo-nivel-1').value;
     percentualNivel = Number(document.querySelector('.acerto-nivel-1').value);
     imagemNivel = document.querySelector('.img-nivel-1').value;
     descricaoNivel = document.querySelector('.descricao-nivel-1').value;
-   
-    if(tituloNivel.length >= 10 && (percentualNivel >= 0 && percentualNivel <= 100) && descricaoNivel.length >= 30){
+
+    if (tituloNivel.length >= 10 && (percentualNivel >= 0 && percentualNivel <= 100) && descricaoNivel.length >= 30) {
         alert("Oi");
         //adicionar função para a página final
 
     } else {
         alert('Por favor! Preencha os dados corretamente');
     }
-    
+
 }
 //Fim da validação
 
 // Inicio Buscar Lista de Quizzes
-    const GetQuizzesURL = 'https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/';
-    let ListQuizzes = axios.get(GetQuizzesURL);
-    ListQuizzes.then(LoadQuizzes);
-    ListQuizzes.catch(erro => console.log(erro.response.status));
+const GetQuizzesURL = 'https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/';
+let ListQuizzes = axios.get(GetQuizzesURL);
+ListQuizzes.then(LoadQuizzes);
+ListQuizzes.catch(erro => console.log(erro.response.status));
 // Fim Buscar Lista de Quizzes
 
 // Inicio Carregar Quizzes na tela
 let Quizz = '';
 let ID = 0;
 const QuizzRow = document.querySelector('.QuizzRow');
-function LoadQuizzes(Response){
+function LoadQuizzes(Response) {
     let Quizzes = Response.data;
     //console.log(Quizzes);
-    for(let i = 0; i < Quizzes.length; i++){
-        Quizz =    `<li class="QuizzBox" style="background-image: url(${Quizzes[i].image})">
+    for (let i = 0; i < Quizzes.length; i++) {
+        Quizz = `<li class="QuizzBox" style="background-image: url(${Quizzes[i].image})">
                         <div class="Layer"></div>
                         <h3 class="QuizzTitle">${Quizzes[i].title}</h3>
                         <p class="ID" style="display: none">${Quizzes[i].id}</p>
@@ -111,7 +111,7 @@ function LoadQuizzes(Response){
 
         QuizzRow.innerHTML += Quizz;
         Quizz = '';
-        
+
         SelectQuiz();
     }
 }
@@ -119,7 +119,7 @@ function LoadQuizzes(Response){
 
 const ListQuiz = document.querySelector('.ListQuizzes');
 // Inicio Selecionar Quizz
-function SelectQuiz(){
+function SelectQuiz() {
 
     let SelectQuizz = document.querySelectorAll('.QuizzBox');
     SelectQuizz.forEach((Quizz) => {
@@ -130,45 +130,63 @@ function SelectQuiz(){
             quizz2.classList.add('escondido');
             ListQuiz.classList.add('escondido');
             Tela2.classList.remove('escondido');
-            const GetQuizz = axios.get(GetQuizzesURL+ID)
+            const GetQuizz = axios.get(GetQuizzesURL + ID)
             GetQuizz.then(ShowQuizz);
             GetQuizz.catch(erro => console.log(erro.response.status));
-            
+
         })
-    })   
+    })
 }
 // Fim Selecionar Quizz
 
+// Função para randomizar array
+function ShuffleArray(arr) {
+    // Loop em todos os elementos
+for (let i = arr.length - 1; i > 0; i--) {
+        // Escolhendo elemento aleatório
+    const j = Math.floor(Math.random() * (i + 1));
+    // Reposicionando elemento
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+}
+// Retornando array com aleatoriedade
+return arr;
+}
+
 const Tela2 = document.querySelector('.Tela2');
 // Inicio Show Tela2 Quizz
-function ShowQuizz(Response){
+function ShowQuizz(Response) {
     const CurrentQuizz = Response.data
-    console.log(CurrentQuizz);
+    // console.log(CurrentQuizz);
     Tela2.innerHTML += `<div class="ImageTopQuizz" style="background-image: url(${CurrentQuizz.image})">
                         <div class="Obscure"></div>
                             <p class="CurrentQuizzTitle">
                                 ${CurrentQuizz.title}
                             </p>
                         </div>`
-    for(let i = 0; i < CurrentQuizz.questions.length; i++){
+    for (let i = 0; i < CurrentQuizz.questions.length; i++) {
+        let RandomArray = ShuffleArray(CurrentQuizz.questions[i].answers);
         Tela2.innerHTML += `<div class="QuestionBox">
-                                    <div class="QuestionTitleBox">
-                                        <h3 class="QuestionTitle">${CurrentQuizz.questions[i].title}</h3>
-                                    </div>
-                                    </div>
-                                </div>`
+                                <div class="QuestionTitleBox">
+                                    <h3 class="QuestionTitle">${CurrentQuizz.questions[i].title}</h3>
+                                </div>
+                                <div class="AnswersBox">
+                                
+                                </div>
+                            </div>`
         for(let j = 0; j < CurrentQuizz.questions[i].answers.length; j++){
-            const Answers = document.querySelector('.QuestionBox', '.Answers');
-            Answers.innerHTML +=   `<div class="AnswersBox">
-                                        <div class="Answer">
-                                            <img class="AnswersImage" src="${CurrentQuizz.questions[i].answers[j].image}">
-                                            <h5>${CurrentQuizz.questions[i].answers[j].text}</h5>
-                                        </div>
-                                    </div>`
+            // console.log(RandomArray[j].text)
+            RenderAnswer(RandomArray[j])
         }
     }
 
 }
 // Fim Show Tela2 Quizz
 
-
+function RenderAnswer(RandomArray){
+    let Render = document.querySelector('.QuestionBox').querySelector('.AnswersBox');
+    // console.log(RandomArray.text)
+    Render.innerHTML +=    `<div class="Answer">
+                                <img class="AnswersImage" src="${RandomArray.image}">
+                                <h5>${RandomArray.text}</h5>
+                            </div>`
+}
