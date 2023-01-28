@@ -15,7 +15,18 @@ const msgsErrors = {
     url :{msg : 'A URL deve ter formato URL', field : '#url'},
     qtd_questions : {msg : 'Devem haver no mínimo 3 perguntas', field : '#qtd_questions'},
     qtd_levels : {msg : 'Devem haver no mínimo 2 níveis', field : '#qtd_levels'},
-    
+    question_title : {msg : 'Deve ter no mínimo 20 caracteres', field : '#question-'},
+    question_color : {msg : 'A cor inválida', field : '#color-'},
+    question_answer : {msg : 'Informe a resposta', field : '#answer-'},
+    question_anwser_img : {msg : 'A URL deve ter formato URL', field : '#img-'},
+    question_answer_incorrect : {msg : 'Deve ter pelo menos uma resposta incorreta', field : '#incorrect-'},
+    question_answer_incorrect_url: {msg : 'A URL deve ter formato URL', field : '#incorrectUrl-'},
+    level_title : {msg : 'Devem haver no mínimo 10 caracteres', field : '#level-title-'},
+    level_min_value : {msg : 'O valor deve estar entre 0 e 100', field : '#level-percent-'},
+    level_img : {msg : 'A URL deve ter formato URL', field : '#level-img-'},
+    level_text: {msg : 'Devem haver no mínimo 30 caracteres', field : '#level-description-'},
+    level_min_percent: {msg : 'Devem haver pelo menos um nível com 0%', field : '#level-percent-1'},
+    level_number_min: {msg : 'Devem haver pelo menos 2 níveis', field : '#min-levels'},
 }
 //  END Message Errors
 
@@ -33,9 +44,10 @@ function prosseguirParaPerguntas() {
     nivelQuizz = Number(document.querySelector('.novo-nivel-quizz').value);
 
     if ((tituloQuizz.length >= 20 && tituloQuizz.length <= 65)) {
-        if(isValidURL === true){
-            if(perguntasQuizz >= 3){
+        if(isValidURL(imagemQuizz)){
+            if(perguntasQuizz >= 3 && perguntasQuizz != NaN){
                 if(nivelQuizz >= 2){
+                    console.log('oxe')
                     //adicionar função para a criação das perguntas
                     //Quando clicar no botão de "prosseguir para níveis" chamar função createLevels()
                 }else{
@@ -45,22 +57,29 @@ function prosseguirParaPerguntas() {
                 alert(msgsErrors.qtd_questions.msg);
             }
         }else{
-            alert(msgsErrors.url.msg);
+            isValidURL(imagemQuizz)
         }
     } else {
         alert(msgsErrors.title.msg);
     }
 }
 
+//  BEGIN Create Questions
+
+    function CreateQuestios(){
+
+    }
+
+//  END Create Questions
+
 //  BEGIN Validations
-    function isValidURL(string){
-        let url;
-        try {
-            url = new URL(string);
-        } catch (_) {
-            return false;  
+    function isValidURL(STR){
+        const re = new RegExp("^((http(s?):\/\/(www.)?[a-z]+.com\/)|(magnet:\?xt=urn:btih:))")
+        if (re.test(STR)) {
+            // alert("Valid");
+        } else {
+            alert(msgsErrors.url.msg);
         }
-        return true;
     }
 //  END Validatios
 
@@ -268,8 +287,7 @@ return arr;
 //  BEGIN
 //  END
 
-//  BEGIN
-//  END
+
 
 
 
