@@ -1,12 +1,19 @@
 const quizz = document.querySelector('.tela1');
 const criarQuizz = document.querySelector('.tela3');
 const quizz2 = document.querySelector('.tela1-com-quizz');
+const nameList = document.querySelector('.NameList');
+const listQuizz = document.querySelector('.ListQuizzes');
+
 function criarMeuQuizz() {
     quizz.classList.add('escondido');
 
     criarQuizz.classList.remove('escondido');
 
     quizz2.classList.add('escondido');
+
+    nameList.classList.add('escondido');
+
+    listQuizz.classList.add('escondido');
 }
 
 //  BEGIN Message Errors
@@ -116,6 +123,7 @@ function openNextLevel() {
     openNivel.innerHTML = template2;
 }
 //Fim dos inputs dos niveis
+
 // Validação de dados colocados nos inputs do quizz
 let tituloNivel = "";
 let percentualNivel = 0;
@@ -126,6 +134,15 @@ let arrayPercentual = [];
 let arrayImg = [];
 let arrayDescricao = [];
 
+// Msg de erro para níveis
+const msgsErrorsNiveis = {
+    title2 : {msg : 'O título deve ter no mínimo 10 caracteres', field : '#title2'},
+    qtd_acertos :{msg : 'Deve ser um valor entre 0 e 100, com um nível com acerto de 0', field : '#qtd_acertos'},
+    url : {msg : 'A URL deve ter formato URL', field : '#url'},
+    qtd_descricao : {msg : 'Devem haver no mínimo 30 caracteres', field : '#qtd_descricao'},
+    
+}
+// Fim da msg de erro
 function proceedToFinishQuizz() {
     let contador = 0;
     for(let indice = 1; indice <= nivelQuizz; indice++){
@@ -134,56 +151,113 @@ function proceedToFinishQuizz() {
         imagemNivel = document.querySelector(`.img-nivel-${indice}`).value;
         descricaoNivel = document.querySelector(`.descricao-nivel-${indice}`).value;
 
-        if (tituloNivel.length >= 10 && (percentualNivel >= 0 && percentualNivel <= 100) && descricaoNivel.length >= 30) {
-            contador += 1;
-            console.log(contador);
-            arrayTitulo.push(tituloNivel);
-            arrayPercentual.push(percentualNivel)
-            arrayImg.push(imagemNivel); 
-            arrayDescricao.push(descricaoNivel);
-
+        if (tituloNivel.length >= 10) {
+            if(percentualNivel >= 0 && percentualNivel <= 100){
+                if(isValidURL === true){
+                    if(descricaoNivel.length >= 30){
+                        contador += 1;
+                        arrayTitulo.push(tituloNivel);
+                        arrayPercentual.push(percentualNivel)
+                        arrayImg.push(imagemNivel); 
+                        arrayDescricao.push(descricaoNivel);
+                    }else{
+                        contador = 0;
+                        alert(msgsErrorsNiveis.qtd_descricao.msg);
+                    }
+                }else{
+                    contador = 0;
+                    alert(msgsErrorsNiveis.url.msg);
+                }
+            }else{
+                contador = 0;
+                alert(msgsErrorsNiveis.qtd_acertos.msg);
+            }
         } else {
             contador = 0;
-            alert('Por favor! Preencha os dados corretamente');
+            alert(msgsErrorsNiveis.title2.msg);
         }
     }
     if(contador === nivelQuizz){
-        //Função para enviar quizz(get.post)
+        sendQuizz();
     }
 }
 //Fim da validação
 
-//---------------------------------------------------------------------------------------------------------
+//Inicio do envio do Quizz criado
+function sendQuizz() {
+
+//Construir objeeto de envio do quizz do usuário
+
+   // const sendQuizzes = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', );
+    //sendQuizzes.then(FinishQuizz);
+    //sendQuizzes.catch(error => console.log(error.response.status));
+}
+//Fim do envio do Quizz criado
+
+//Inicio Da Func para finalizar quizz
+const showYourQuizz = document.querySelector('.tela11-info-quizz');
+
+function FinishQuizz(){ 
+    const closeLevel = document.querySelector('.tela3-niveis');
+    closeLevel.classList.add('escondido');
+    const quizzFinish = document.querySelector('.tela11');
+    quizzFinish.classList.remove('escondido');
+
+    let template3 = `<div>
+    <img src="${imagemQuizz}" alt="Imagem do Quizz">
+    <h4>${tituloQuizz}</h4>
+    </div>`;
+
+    showYourQuizz.innerHTML = showYourQuizz.innerHTML + template3;
+}
+
+//Fim do finalizar quizz
+
+//Botao de voltar home
+
+function backHome(){
+    const fim = document.querySelector('.tela11');
+    const inicio = document.querySelector('.tela1-com-quizz');
+    const nameList2 = document.querySelector('.NameList');
+    const listQuizz2 = document.querySelector('.ListQuizzes');
+
+    fim.classList.add('escondido');
+    inicio.classList.remove('escondido');
+    nameList2.classList.remove('escondido');
+    listQuizz2.classList.remove('escondido');
+    
+}
+// Fim do botão de voltar
 
 //  BEGIN Variables
-    const URL_API = 'https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/'
-    const ListAllQuizzes = document.querySelector('.ListQuizzes');
-    let   ID = 0;
-    let AllQuizzesSerializabled;
-    let AllQuizzesUnSerializabled;
-    let MyQuizzesSerializabled;
-    let MyQuizzesUnSerializabled;
-    const ListAll =  document.querySelector('.ListAll');
+const URL_API = 'https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/'
+const ListAllQuizzes = document.querySelector('.ListQuizzes');
+let   ID = 0;
+let AllQuizzesSerializabled;
+let AllQuizzesUnSerializabled;
+let MyQuizzesSerializabled;
+let MyQuizzesUnSerializabled;
+const ListAll =  document.querySelector('.ListAll');
 //  END Variables
 
 //  BEGIN Get Errors
-    function GetError(error){
-        console.log(error.response.status )
-    }
+function GetError(error){
+    console.log(error.response.status )
+}
 //  END Get Errors
 
 //  BEGIN Get Quizzes
-    let GetAllQuizzes = axios.get(URL_API);
-        GetAllQuizzes.then(SerializeQuizzes);
-        GetAllQuizzes.catch(GetError)
+let GetAllQuizzes = axios.get(URL_API);
+    GetAllQuizzes.then(SerializeQuizzes);
+    GetAllQuizzes.catch(GetError)
 //  END Get Quizzes
 
 //  BEGIN SerializeQuizzes
-    function SerializeQuizzes(response){
-        AllQuizzesSerializabled = JSON.stringify(response.data)
-        localStorage.setItem('AllQuizzes', AllQuizzesSerializabled);
-        LoadQuizzes()
-    }
+function SerializeQuizzes(response){
+    AllQuizzesSerializabled = JSON.stringify(response.data)
+    localStorage.setItem('AllQuizzes', AllQuizzesSerializabled);
+    LoadQuizzes()
+}
 //  END SerializeQuizzes
 
 //  BEGIN Load Quizzes
