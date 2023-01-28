@@ -8,6 +8,18 @@ function criarMeuQuizz() {
 
     quizz2.classList.add('escondido');
 }
+
+//  BEGIN Message Errors
+const msgsErrors = {
+    title : {msg : 'O título deve ter no mínimo 20 e no máximo 65 caracteres', field : '#title'},
+    url :{msg : 'A URL deve ter formato URL', field : '#url'},
+    qtd_questions : {msg : 'Devem haver no mínimo 3 perguntas', field : '#qtd_questions'},
+    qtd_levels : {msg : 'Devem haver no mínimo 2 níveis', field : '#qtd_levels'},
+    
+}
+//  END Message Errors
+
+
 //Varáveis globais para serem usados nas descrições/informações do Quizz depois
 let tituloQuizz = "";
 let imagemQuizz = "";
@@ -20,13 +32,38 @@ function prosseguirParaPerguntas() {
     perguntasQuizz = Number(document.querySelector('.nova-pergunta-quizz').value);
     nivelQuizz = Number(document.querySelector('.novo-nivel-quizz').value);
 
-    if ((tituloQuizz.length >= 20 && tituloQuizz.length <= 65) && perguntasQuizz >= 3 && nivelQuizz >= 2) {
-        //adicionar função para a criação das perguntas
-        //Quando clicar no botão de "prosseguir para níveis" chamar função createLevels()
+    if ((tituloQuizz.length >= 20 && tituloQuizz.length <= 65)) {
+        if(isValidURL === true){
+            if(perguntasQuizz >= 3){
+                if(nivelQuizz >= 2){
+                    //adicionar função para a criação das perguntas
+                    //Quando clicar no botão de "prosseguir para níveis" chamar função createLevels()
+                }else{
+                    alert(msgsErrors.qtd_levels.msg);
+                }
+            }else{
+                alert(msgsErrors.qtd_questions.msg);
+            }
+        }else{
+            alert(msgsErrors.url.msg);
+        }
     } else {
-        alert('Por favor! Preencha os dados corretamente');
+        alert(msgsErrors.title.msg);
     }
 }
+
+//  BEGIN Validations
+    function isValidURL(string){
+        let url;
+        try {
+            url = new URL(string);
+        } catch (_) {
+            return false;  
+        }
+        return true;
+    }
+//  END Validatios
+
 //Colocando na tela a quantidade de níveis pedidos
 function createLevels() {
     const searchNiveis = document.querySelector('.niveis');
@@ -223,8 +260,7 @@ return arr;
     }
 //  END Open Quizz Selected
 
-//  BEGIN
-//  END
+//---------------------------------------------------------------------------------------------------------
 
 //  BEGIN
 //  END
@@ -234,5 +270,7 @@ return arr;
 
 //  BEGIN
 //  END
+
+
 
 
