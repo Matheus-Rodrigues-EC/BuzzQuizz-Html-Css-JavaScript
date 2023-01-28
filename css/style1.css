@@ -308,17 +308,26 @@ body {
     margin-bottom: 35px;
 }
 
-.CorrectAnswersTitle, .WrongAnswersTitle{
-
-}
-
-.Input, .Url{
+.Input, .Url, .Color{
     width: 564px;
     height: 46px;
-    color: #D1D1D1;
+    color: #000000;
     border: 1px solid #D1D1D1;
     border-radius: 5px;
-    margin-bottom: 15px;
+    margin-bottom: 15px;    padding: 0 23px;
+    font-weight: 400;
+    font-size: 19px;
+    box-sizing: border-box;
+}
+.Input::placeholder, .Url::placeholder {
+    color: #bababa;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 22px;
+    position: absolute;
+    left: 23px;
+    top: 13px;
 }
 
 .NextToLevels {
@@ -332,6 +341,6 @@ body {
     text-align: center;
     border-radius: 15px;
     border: 1px solid rgba(255, 255, 255, 1);
-    margin: 75px 138px;
+    margin: 75px auto 30px auto;
 }
 /*---BEGIN Questions My Quizz---*/

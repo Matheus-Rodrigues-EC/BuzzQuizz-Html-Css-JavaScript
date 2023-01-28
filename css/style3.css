@@ -49,6 +49,10 @@
     border-radius: 5px;
     border: 1px solid rgba(209, 209, 209, 1);
     margin: 4px auto;
+    padding: 0 23px;
+    font-weight: 400;
+    font-size: 19px;
+    box-sizing: border-box;
 }
 input::placeholder {
     color: #bababa;

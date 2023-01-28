@@ -3,7 +3,7 @@ const criarQuizz = document.querySelector('.tela3');
 const DoQuestions = document.querySelector('.MyQuestions');
 const quizz2 = document.querySelector('.tela1-com-quizz');
 const nameList = document.querySelector('.NameList');
-const listQuizz = document.querySelector('.ListQuizzes');
+const listQuizz = document.querySelector('.ListAll');
 
 function criarMeuQuizz() {
     quizz.classList.add('escondido');
@@ -73,25 +73,8 @@ function prosseguirParaPerguntas() {
 }
 
 //  BEGIN Create Questions
-
     function CreateQuestios(){
-        let quizz = {
-            title: tituloQuizz,
-            image: imagemQuizz,
-            questions: [],
-            levels: []
-        }
-        // console.log(quizz)
-        let question = {
-            title: '',
-            color: '',
-            answers: []
-        }
-        let answer = {
-            text: '',
-            image: '',
-            isCorrectAnswer: false
-        }
+        
 
         const CreateQuestions = document.querySelector('.CreateQuestions');
         CreateQuestions.classList.remove('escondido')
@@ -101,11 +84,11 @@ function prosseguirParaPerguntas() {
 
         for(let i = 1; i <= perguntasQuizz; i++){
             Quizz =   `<div class="QuestionsMyQuizz">
-                                                <div class="Questions">
+                                                <div class="Questions Q${i}">
                                                 <h3 class="MyQuestionTitle">Pergunta ${i}</h3>
-                                                    <div class="Question ${i}">
-                                                        <input class="Input" type="text" placeholder="Texto da Pergunta"/>
-                                                        <input class="Url" type="text" placeholder="Cor de fundo da Pergunta"/>
+                                                    <div class="Question Quest${i}">
+                                                        <input class="Input T${i}" type="text" placeholder="Texto da Pergunta"/>
+                                                        <input class="Color C${i}" type="text" placeholder="Cor de fundo da Pergunta"/>
                                                     </div>
                                                     <h3 class="MyQuestionTitle">Resposta Correta</h3>
                                                     <div class="CorrectAnswers">
@@ -132,11 +115,67 @@ function prosseguirParaPerguntas() {
 
             DoQuestions.innerHTML += Quizz;
             Quizz = '';
+            
         }
         DoQuestions.innerHTML += `<button class="NextToLevels" onclick="createLevels()">Prosseguir pra criar níveis</button>`
-
     }
 
+//  BEGIN
+    function ValidateQuestions(){
+        let MyQuizz = {
+            title: tituloQuizz,
+            image: imagemQuizz,
+            questions: [],
+            levels: []
+        }
+        
+        let question = {
+            title: '',
+            color: '',
+            answers: []
+        }
+        
+        console.log(perguntasQuizz)
+        for(let i = 1; i <= perguntasQuizz; i++){
+            let Correctanswer = {
+                text: '',
+                image: '',
+                isCorrectAnswer: false
+            }
+            for(let j = 1; j <= 3; j++){
+                let Wronganswer = {
+                    text: '',
+                    image: '',
+                    isCorrectAnswer: false
+                }
+                
+                question.title = document.querySelector(`.Q${i}`).querySelector(`.T${i}`).value;
+                question.color = document.querySelector(`.Q${i}`).querySelector(`.C${i}`).value;
+
+                Wronganswer.text = document.querySelector(`.Q${i}`).querySelector(`.WrongAnswer${j}`).value;
+                Wronganswer.image = document.querySelector(`.Q${i}`).querySelector(`.WrongURL${j}`).value;
+                Wronganswer.isCorrectAnswer = false;
+
+                question.answers.push(Wronganswer);
+            }
+            Correctanswer.text = document.querySelector(`.Q${i}`).querySelector(`.CorrectAnswer`).value;
+            Correctanswer.image = document.querySelector(`.Q${i}`).querySelector(`.CorrectURL`).value;
+            Correctanswer.isCorrectAnswer = true;
+
+            question.answers.push(Correctanswer);
+            MyQuizz.questions.push(question);
+            console.log(question);
+            
+        }
+        console.log(MyQuizz);
+    }
+
+//  END
+
+            
+            
+            
+        
 //  END Create Questions
 
 //  BEGIN Validations
@@ -154,6 +193,7 @@ function prosseguirParaPerguntas() {
 
 //Colocando na tela a quantidade de níveis pedidos
 function createLevels() {
+    ValidateQuestions()
     const searchNiveis = document.querySelector('.niveis');
 
     for (let i = 2; i <= nivelQuizz; i++) {
@@ -394,7 +434,7 @@ return arr;
                                     </div>`
                 for(let j = 0; j < Questions.length; j++){
                     let Answers = ShuffleArray(Questions[j].answers);
-                    console.log(Answers)
+                    // console.log(Answers)
                     Tela2.innerHTML += `<div class="QuestionBox">
                                             <div class="QuestionTitleBox">
                                                 <h3 class="QuestionTitle">${Questions[j].title}</h3>
@@ -420,8 +460,7 @@ return arr;
 //  BEGIN
 //  END
 
-//  BEGIN
-//  END
+
 
 
 
