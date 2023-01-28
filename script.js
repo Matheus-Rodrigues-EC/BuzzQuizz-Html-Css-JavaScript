@@ -1,5 +1,6 @@
 const quizz = document.querySelector('.tela1');
 const criarQuizz = document.querySelector('.tela3');
+const DoQuestions = document.querySelector('.MyQuestions');
 const quizz2 = document.querySelector('.tela1-com-quizz');
 const nameList = document.querySelector('.NameList');
 const listQuizz = document.querySelector('.ListQuizzes');
@@ -54,8 +55,9 @@ function prosseguirParaPerguntas() {
         if(isValidURL(imagemQuizz)){
             if(perguntasQuizz >= 3 && perguntasQuizz != NaN){
                 if(nivelQuizz >= 2){
-                    console.log('oxe')
                     //adicionar função para a criação das perguntas
+                    CreateQuestios();
+                    criarQuizz.classList.add('escondido');
                     //Quando clicar no botão de "prosseguir para níveis" chamar função createLevels()
                 }else{
                     alert(msgsErrors.qtd_levels.msg);
@@ -64,7 +66,6 @@ function prosseguirParaPerguntas() {
                 alert(msgsErrors.qtd_questions.msg);
             }
         }else{
-            isValidURL(imagemQuizz)
         }
     } else {
         alert(msgsErrors.title.msg);
@@ -74,6 +75,65 @@ function prosseguirParaPerguntas() {
 //  BEGIN Create Questions
 
     function CreateQuestios(){
+        let quizz = {
+            title: tituloQuizz,
+            image: imagemQuizz,
+            questions: [],
+            levels: []
+        }
+        // console.log(quizz)
+        let question = {
+            title: '',
+            color: '',
+            answers: []
+        }
+        let answer = {
+            text: '',
+            image: '',
+            isCorrectAnswer: false
+        }
+
+        const CreateQuestions = document.querySelector('.CreateQuestions');
+        CreateQuestions.classList.remove('escondido')
+        let Quizz = '';
+
+        DoQuestions.innerHTML += `<h3 Class="CreateYourQuestions">Crie Suas Perguntas</h3>`
+
+        for(let i = 1; i <= perguntasQuizz; i++){
+            Quizz =   `<div class="QuestionsMyQuizz">
+                                                <div class="Questions">
+                                                <h3 class="MyQuestionTitle">Pergunta ${i}</h3>
+                                                    <div class="Question ${i}">
+                                                        <input class="Input" type="text" placeholder="Texto da Pergunta"/>
+                                                        <input class="Url" type="text" placeholder="Cor de fundo da Pergunta"/>
+                                                    </div>
+                                                    <h3 class="MyQuestionTitle">Resposta Correta</h3>
+                                                    <div class="CorrectAnswers">
+                                                        <input class="CorrectAnswer Input" type="text" placeholder="Resposta correta"/>
+                                                        <input class="CorrectURL Url" type="url" placeholder="URL da imagem"/>
+                                                    </div>
+                                                    <h3 class="MyQuestionTitle">Respostas Incorretas</h3>
+                                                    <div class="WrongAnswers">
+                                                        <div class="Wrong">
+                                                            <input class="WrongAnswer1 Input" type="text" placeholder="Resposta Incorreta 1"/>
+                                                            <input class="WrongURL1 Url" type="url" placeholder="URL da imagem 1"/>
+                                                        </div>
+                                                        <div class="Wrong">
+                                                            <input class="WrongAnswer2 Input" type="text" placeholder="Resposta Incorreta 2"/>
+                                                            <input class="WrongURL2 Url" type="url" placeholder="URL da imagem 2"/>
+                                                        </div>
+                                                        <div class="Wrong">
+                                                            <input class="WrongAnswer3 Input" type="text" placeholder="Resposta Incorreta 3"/>
+                                                            <input class="WrongURL3 Url" type="url" placeholder="URL da imagem 3"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>`
+
+            DoQuestions.innerHTML += Quizz;
+            Quizz = '';
+        }
+        DoQuestions.innerHTML += `<button class="NextToLevels" onclick="createLevels()">Prosseguir pra criar níveis</button>`
 
     }
 
@@ -84,8 +144,10 @@ function prosseguirParaPerguntas() {
         const re = new RegExp("^((http(s?):\/\/(www.)?[a-z]+.com\/)|(magnet:\?xt=urn:btih:))")
         if (re.test(STR)) {
             // alert("Valid");
+            return true
         } else {
             alert(msgsErrors.url.msg);
+            return false
         }
     }
 //  END Validatios
