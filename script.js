@@ -88,105 +88,142 @@ function proceedToFinishQuizz() {
 }
 //Fim da validação
 
-// Inicio Buscar Lista de Quizzes
-const GetQuizzesURL = 'https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/';
-let ListQuizzes = axios.get(GetQuizzesURL);
-ListQuizzes.then(LoadQuizzes);
-ListQuizzes.catch(erro => console.log(erro.response.status));
-// Fim Buscar Lista de Quizzes
+//---------------------------------------------------------------------------------------------------------
 
-// Inicio Carregar Quizzes na tela
-let Quizz = '';
-let ID = 0;
-const QuizzRow = document.querySelector('.QuizzRow');
-function LoadQuizzes(Response) {
-    let Quizzes = Response.data;
-    //console.log(Quizzes);
-    for (let i = 0; i < Quizzes.length; i++) {
-        Quizz = `<li class="QuizzBox" style="background-image: url(${Quizzes[i].image})">
-                        <div class="Layer"></div>
-                        <h3 class="QuizzTitle">${Quizzes[i].title}</h3>
-                        <p class="ID" style="display: none">${Quizzes[i].id}</p>
-                    </li>`
+//  BEGIN Variables
+    const URL_API = 'https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/'
+    const ListAllQuizzes = document.querySelector('.ListQuizzes');
+    let   ID = 0;
+    let AllQuizzesSerializabled;
+    let AllQuizzesUnSerializabled;
+    let MyQuizzesSerializabled;
+    let MyQuizzesUnSerializabled;
+    const ListAll =  document.querySelector('.ListAll');
+//  END Variables
 
-        QuizzRow.innerHTML += Quizz;
-        Quizz = '';
-
-        SelectQuiz();
+//  BEGIN Get Errors
+    function GetError(error){
+        console.log(error.response.status )
     }
-}
-// Fim Carregar Quizzes na tela
+//  END Get Errors
 
-const ListQuiz = document.querySelector('.ListQuizzes');
-// Inicio Selecionar Quizz
-function SelectQuiz() {
+//  BEGIN Get Quizzes
+    let GetAllQuizzes = axios.get(URL_API);
+        GetAllQuizzes.then(SerializeQuizzes);
+        GetAllQuizzes.catch(GetError)
+//  END Get Quizzes
 
-    let SelectQuizz = document.querySelectorAll('.QuizzBox');
-    SelectQuizz.forEach((Quizz) => {
-        Quizz.addEventListener('click', (event) => {
-            ID = Quizz.querySelector('.ID').innerHTML;
-            quizz.classList.add('escondido');
-            criarQuizz.classList.add('escondido');
-            quizz2.classList.add('escondido');
-            ListQuiz.classList.add('escondido');
-            Tela2.classList.remove('escondido');
-            const GetQuizz = axios.get(GetQuizzesURL + ID)
-            GetQuizz.then(ShowQuizz);
-            GetQuizz.catch(erro => console.log(erro.response.status));
+//  BEGIN SerializeQuizzes
+    function SerializeQuizzes(response){
+        AllQuizzesSerializabled = JSON.stringify(response.data)
+        localStorage.setItem('AllQuizzes', AllQuizzesSerializabled);
+        LoadQuizzes()
+    }
+//  END SerializeQuizzes
 
+//  BEGIN Load Quizzes
+    function LoadQuizzes(response){
+        // console.log(response.data);
+        AllQuizzesUnSerializabled = localStorage.getItem('AllQuizzes')
+        let ListQuizzes = JSON.parse(AllQuizzesUnSerializabled);
+        let Quizz = '';
+        for(let i = 0; i < ListQuizzes.length; i++){
+            // console.log(ListQuizzes[i].image)
+            Quizz = `<li class="Quizz">
+                        <img class="QuizzImg" src="${ListQuizzes[i].image}"/>
+                        <div class="QuizzGradient">
+                            <h3 class="QuizzTitle">${ListQuizzes[i].title}</h3>
+                            <span class="ID" style="display:none">${ListQuizzes[i].id}</span>
+                        </div>
+                    </li>`
+            
+            ListAllQuizzes.innerHTML += Quizz;
+            Quizz = '';
+            Select()
+        }
+    }
+//  END Load Quizzes
+
+//  BEGIN Select Quizz
+    function Select(){
+        let SelectQuizz = document.querySelectorAll('.Quizz');
+        SelectQuizz.forEach(Quizz => {
+            Quizz.addEventListener('click', (event) => {
+                ID = Quizz.querySelector('.ID').innerHTML;
+                // console.log(ID);
+                OpenQuizz(ID);
+            })
         })
-    })
-}
-// Fim Selecionar Quizz
+    }
+//  END Select Quizz
 
-// Função para randomizar array
-function ShuffleArray(arr) {
-    // Loop em todos os elementos
-for (let i = arr.length - 1; i > 0; i--) {
-        // Escolhendo elemento aleatório
-    const j = Math.floor(Math.random() * (i + 1));
-    // Reposicionando elemento
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-}
+//  BEGIN ShuffleArray
+    // Função para randomizar array
+    function ShuffleArray(arr) {
+        // Loop em todos os elementos
+    for (let i = arr.length - 1; i > 0; i--) {
+            // Escolhendo elemento aleatório
+        const j = Math.floor(Math.random() * (i + 1));
+        // Reposicionando elemento
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
 // Retornando array com aleatoriedade
 return arr;
 }
+//  END ShuffleArray
 
-const Tela2 = document.querySelector('.Tela2');
-// Inicio Show Tela2 Quizz
-function ShowQuizz(Response) {
-    const CurrentQuizz = Response.data
-    // console.log(CurrentQuizz);
-    Tela2.innerHTML += `<div class="ImageTopQuizz" style="background-image: url(${CurrentQuizz.image})">
-                        <div class="Obscure"></div>
-                            <p class="CurrentQuizzTitle">
-                                ${CurrentQuizz.title}
-                            </p>
-                        </div>`
-    for (let i = 0; i < CurrentQuizz.questions.length; i++) {
-        let RandomArray = ShuffleArray(CurrentQuizz.questions[i].answers);
-        Tela2.innerHTML += `<div class="QuestionBox">
-                                <div class="QuestionTitleBox">
-                                    <h3 class="QuestionTitle">${CurrentQuizz.questions[i].title}</h3>
-                                </div>
-                                <div class="AnswersBox">
-                                
-                                </div>
-                            </div>`
-        for(let j = 0; j < CurrentQuizz.questions[i].answers.length; j++){
-            // console.log(RandomArray[j].text)
-            RenderAnswer(RandomArray[j])
+//  BEGIN Open Quizz Selected
+    function OpenQuizz(Id){
+        const Tela2 = document.querySelector('.tela2');
+        AllQuizzesUnSerializabled = localStorage.getItem('AllQuizzes')
+        let ListQuizzes = JSON.parse(AllQuizzesUnSerializabled);
+        for(let i = 0; i < ListQuizzes.length; i++){
+            if(Id == ListQuizzes[i].id){
+                let Questions = ListQuizzes[i].questions;
+                // console.log(Questions)
+                quizz.classList.add('escondido');
+                ListAll.classList.add('escondido');
+                Tela2.classList.remove('escondido');
+
+                Tela2.innerHTML += `<div>
+                                        <div class="ImageCurrentQuiz" style="background-image: url(${ListQuizzes[i].image})">
+                                            <div class="Layer"></div>
+                                            <p class="TitleCurrentQuizz">${ListQuizzes[i].title}</p>
+                                        </div>
+                                    </div>`
+                for(let j = 0; j < Questions.length; j++){
+                    let Answers = ShuffleArray(Questions[j].answers);
+                    console.log(Answers)
+                    Tela2.innerHTML += `<div class="QuestionBox">
+                                            <div class="QuestionTitleBox">
+                                                <h3 class="QuestionTitle">${Questions[j].title}</h3>
+                                            </div>
+                                            <div class="AnswersBox AnswersBox${j}">
+                                            </div>
+                                        </div>`
+                    let AnswersBox = document.querySelector(`.AnswersBox${j}`);
+                    for(let k = 0; k < Answers.length; k++){
+                        AnswersBox.innerHTML += `<div class="Answer">
+                                                    <img class="AnswersImage" src="${Answers[k].image}">
+                                                    <h5 class="AnswersText">${Answers[k].text}</h5>
+                                                </div` 
+                    }
+                }
+            }
         }
     }
+//  END Open Quizz Selected
 
-}
-// Fim Show Tela2 Quizz
+//  BEGIN
+//  END
 
-function RenderAnswer(RandomArray){
-    let Render = document.querySelector('.QuestionBox').querySelector('.AnswersBox');
-    // console.log(RandomArray.text)
-    Render.innerHTML +=    `<div class="Answer">
-                                <img class="AnswersImage" src="${RandomArray.image}">
-                                <h5>${RandomArray.text}</h5>
-                            </div>`
-}
+//  BEGIN
+//  END
+
+//  BEGIN
+//  END
+
+//  BEGIN
+//  END
+
+
