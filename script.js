@@ -55,7 +55,7 @@ function prosseguirParaPerguntas() {
     if ((tituloQuizz.length >= 20 && tituloQuizz.length <= 65)) {
         if(linker.test(imagemQuizz)){
             if(perguntasQuizz >= 3 && perguntasQuizz != NaN){
-                if(nivelQuizz >= 2){
+                if(nivelQuizz >= 2 && nivelQuizz != NaN){
                     //adicionar função para a criação das perguntas
                     CreateQuestions();
                     criarQuizz.classList.add('escondido');
@@ -265,15 +265,6 @@ let arrayPercentual = [];
 let arrayImg = [];
 let arrayDescricao = [];
 
-// Msg de erro para níveis
-const msgsErrorsNiveis = {
-    title2 : {msg : 'O título deve ter no mínimo 10 caracteres', field : '#title2'},
-    qtd_acertos :{msg : 'Deve ser um valor entre 0 e 100, com um nível com acerto de 0', field : '#qtd_acertos'},
-    url : {msg : 'A URL deve ter formato URL', field : '#url'},
-    qtd_descricao : {msg : 'Devem haver no mínimo 30 caracteres', field : '#qtd_descricao'},
-    
-}
-// Fim da msg de erro
 function proceedToFinishQuizz() {
     let contador = 0;
     for(let indice = 1; indice <= nivelQuizz; indice++){
@@ -293,37 +284,33 @@ function proceedToFinishQuizz() {
                         arrayDescricao.push(descricaoNivel);
                     }else{
                         contador = 0;
-                        alert(msgsErrorsNiveis.qtd_descricao.msg);
+                        alert(msgsErrors.level_text.msg);
                     }
                 }else{
                     contador = 0;
-                    alert(msgsErrorsNiveis.url.msg);
+                    alert(msgsErrors.url.msg);
                 }
             }else{
                 contador = 0;
-                alert(msgsErrorsNiveis.qtd_acertos.msg);
+                alert(msgsErrors.level_min_value.msg);
             }
         } else {
             contador = 0;
-            alert(msgsErrorsNiveis.title2.msg);
+            alert(msgsErrors.level_title.msg);
+        }
+    }
+    for(let i = 0; i < arrayPercentual.length; i++){
+        if (arrayPercentual[i] !== 0){
+            contador = 0;
+            alert(msgsErrors.level_min_percent.msg);
         }
     }
     if(contador === nivelQuizz){
-        sendQuizz();
+        //Função para criar quizz do usuário
     }
 }
 //Fim da validação
 
-//Inicio do envio do Quizz criado
-function sendQuizz() {
-
-//Construir objeeto de envio do quizz do usuário
-
-   // const sendQuizzes = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', );
-    //sendQuizzes.then(FinishQuizz);
-    //sendQuizzes.catch(error => console.log(error.response.status));
-}
-//Fim do envio do Quizz criado
 
 //Inicio Da Func para finalizar quizz
 const showYourQuizz = document.querySelector('.tela11-info-quizz');
