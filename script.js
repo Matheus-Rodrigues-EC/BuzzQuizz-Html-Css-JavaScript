@@ -23,7 +23,7 @@ const msgsErrors = {
     url :{msg : 'A URL deve ter formato URL', field : '#url'},
     qtd_questions : {msg : 'Devem haver no mínimo 3 perguntas', field : '#qtd_questions'},
     qtd_levels : {msg : 'Devem haver no mínimo 2 níveis', field : '#qtd_levels'},
-    question_title : {msg : 'Deve ter no mínimo 20 caracteres', field : '#question-'},
+    question_title : {msg : 'A pergunta deve ter no mínimo 20 caracteres', field : '#question-'},
     question_color : {msg : 'A cor inválida', field : '#color-'},
     question_answer : {msg : 'Informe a resposta', field : '#answer-'},
     question_anwser_img : {msg : 'A URL deve ter formato URL', field : '#img-'},
@@ -121,7 +121,7 @@ function prosseguirParaPerguntas() {
     }
 
 //  BEGIN
-    function ValidateQuestions(){
+    function GetInfoQuestions(){
         let MyQuizz = {
             title: tituloQuizz,
             image: imagemQuizz,
@@ -135,7 +135,7 @@ function prosseguirParaPerguntas() {
             answers: []
         }
         
-        console.log(perguntasQuizz)
+        // console.log(perguntasQuizz)
         for(let i = 1; i <= perguntasQuizz; i++){
             let Correctanswer = {
                 text: '',
@@ -155,24 +155,65 @@ function prosseguirParaPerguntas() {
                 Wronganswer.text = document.querySelector(`.Q${i}`).querySelector(`.WrongAnswer${j}`).value;
                 Wronganswer.image = document.querySelector(`.Q${i}`).querySelector(`.WrongURL${j}`).value;
                 Wronganswer.isCorrectAnswer = false;
-
-                question.answers.push(Wronganswer);
+                
+                if(Wronganswer.text !== ''){
+                    question.answers.push(Wronganswer);
+                }
             }
             Correctanswer.text = document.querySelector(`.Q${i}`).querySelector(`.CorrectAnswer`).value;
             Correctanswer.image = document.querySelector(`.Q${i}`).querySelector(`.CorrectURL`).value;
             Correctanswer.isCorrectAnswer = true;
 
-            question.answers.push(Correctanswer);
+            if(Correctanswer.text !== ''){
+                question.answers.push(Correctanswer);
+            }
             MyQuizz.questions.push(question);
-            console.log(question);
-            
+            // console.log(question);
+            question = {
+                title: '',
+                color: '',
+                answers: []
+            }
         }
-        console.log(MyQuizz);
+        // console.log(MyQuizz);
+        VerifyQuestions(MyQuizz)
+        // return MyQuizz;
     }
 
 //  END
 
-            
+    function VerifyQuestions(Data){
+        let question_title = document.querySelector(`.Q${i}`).querySelector(`.T${i}`).value;
+        let question_color = document.querySelector(`.Q${i}`).querySelector(`.C${i}`).value;
+        let Correctanswer_text = document.querySelector(`.Q${i}`).querySelector(`.CorrectAnswer`).value;
+        let Correctanswer_image = document.querySelector(`.Q${i}`).querySelector(`.CorrectURL`).value;
+        let Wronganswer_text = document.querySelector(`.Q${i}`).querySelector(`.WrongAnswer${i}`).value;
+        let Wronganswer_image = document.querySelector(`.Q${i}`).querySelector(`.WrongURL${i}`).value;
+
+        const linker = new RegExp("^((http(s?):\/\/(www.)?[a-z]+.com\/))")
+        const color = new RegExp("^((#[A-F0-9a-f]{6}\w))")
+        
+        if(question_title.length > 20){ // Verifica se o a pergunta da questão tem mais de 20 caracteres
+            if(color.test(question_color)){ // Verifica se a cor foi digitada corretamente ""COM BUG""
+                if((Correctanswer_text.length > 0) && (Wronganswer_text.length > 0)){ // Verifica se foi digitado algo na resposta correta
+                    if((linker.test(Correctanswer_image)) && (linker.test(Wronganswer_image))){ // Verifica se a url da imagem da resposta correta tem formato correto
+                        // Faltando apenas a verificação de pelo menos ums repostas falsa por hota, todas são obrigatórias
+                        createLevels()
+                    }else{
+                        alert(msgsErrors.question_anwser_img);
+                    }
+                }else{
+                    alert(msgsErrors.question_answer.msg);
+                }
+            }else{
+                alert(msgsErrors.question_color.msg);
+            }
+        }else{
+            alert(msgsErrors.question_title.msg);
+            question_title.value = '';
+        }
+
+    }
             
             
         
@@ -185,15 +226,14 @@ function prosseguirParaPerguntas() {
             // alert("Valid");
             return true
         } else {
-            alert(msgsErrors.url.msg);
-            return false
+            
         }
     }
 //  END Validatios
 
 //Colocando na tela a quantidade de níveis pedidos
 function createLevels() {
-    ValidateQuestions()
+    GetInfoQuestions()
     const searchNiveis = document.querySelector('.niveis');
 
     for (let i = 2; i <= nivelQuizz; i++) {
