@@ -195,9 +195,8 @@ function prosseguirParaPerguntas() {
         
         if(question_title.length > 20){ // Verifica se o a pergunta da questão tem mais de 20 caracteres
             if(color.test(question_color)){ // Verifica se a cor foi digitada corretamente ""COM BUG""
-                if((Correctanswer_text.length > 0) && (Wronganswer_text.length > 0)){ // Verifica se foi digitado algo na resposta correta
+                if((Correctanswer_text.length > 0) && (Wronganswer_text.length > 0)){ // Verifica se foi digitado algo na resposta correta e pelo menos uma resposta errada
                     if((linker.test(Correctanswer_image)) && (linker.test(Wronganswer_image))){ // Verifica se a url da imagem da resposta correta tem formato correto
-                        // Faltando apenas a verificação de pelo menos ums repostas falsa por hota, todas são obrigatórias
                         createLevels()
                     }else{
                         alert(msgsErrors.question_anwser_img);
