@@ -135,6 +135,23 @@ function prosseguirParaPerguntas() {
             color: '',
             answers: []
         }
+
+        let level = {
+            tittle: '',
+            image: '',
+            text: '',
+            minValue: ''
+        }
+
+        for(let i = 0; i < nivelQuizz; i++){
+            level = {
+                title: arrayTitulo[i],
+                image: arrayImg[i],
+                text: arrayDescricao[i],
+                minValue: arrayPercentual[i]
+            }
+            MyQuizz.levels.push(level);
+        }
         
         // console.log(perguntasQuizz)
         for(let i = 1; i <= perguntasQuizz; i++){
@@ -307,11 +324,20 @@ function proceedToFinishQuizz() {
     }
     if(contador === nivelQuizz){
         //Função para criar quizz do usuário
+        sendQuizz();
     }
 }
 //Fim da validação
 
+//Funcção de envio do quizz do usuário
+function sendQuizz(){
 
+    const functionSend = GetInfoQuestions();
+
+    const send = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', functionSend);
+    send.then(FinishQuizz);
+    send.catch(GetError);
+}
 //Inicio Da Func para finalizar quizz
 const showYourQuizz = document.querySelector('.tela11-info-quizz');
 
@@ -343,6 +369,8 @@ function backHome(){
     inicio.classList.remove('escondido');
     nameList2.classList.remove('escondido');
     listQuizz2.classList.remove('escondido');
+
+    //Atualizar para colocar quizz listado do usuário
     
 }
 // Fim do botão de voltar
