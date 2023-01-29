@@ -20,18 +20,18 @@ function criarMeuQuizz() {
 //  BEGIN Message Errors
 const msgsErrors = {
     title : {msg : 'O título deve ter no mínimo 20 e no máximo 65 caracteres', field : '#title'},
-    url :{msg : 'A URL deve ter formato URL', field : '#url'},
+    url :{msg : 'O formato da URL está incorreto', field : '#url'},
     qtd_questions : {msg : 'Devem haver no mínimo 3 perguntas', field : '#qtd_questions'},
     qtd_levels : {msg : 'Devem haver no mínimo 2 níveis', field : '#qtd_levels'},
     question_title : {msg : 'A pergunta deve ter no mínimo 20 caracteres', field : '#question-'},
-    question_color : {msg : 'A cor inválida', field : '#color-'},
-    question_answer : {msg : 'Informe a resposta', field : '#answer-'},
-    question_anwser_img : {msg : 'A URL deve ter formato URL', field : '#img-'},
-    question_answer_incorrect : {msg : 'Deve ter pelo menos uma resposta incorreta', field : '#incorrect-'},
-    question_answer_incorrect_url: {msg : 'A URL deve ter formato URL', field : '#incorrectUrl-'},
+    question_color : {msg : 'Oformato de cor é inválida', field : '#color-'},
+    question_answer : {msg : 'Informe a resposta correta', field : '#answer-'},
+    question_anwser_img : {msg : 'O formato da URL da resposta correta é inválido', field : '#img-'},
+    question_answer_incorrect : {msg : 'Deve ter pelo menos uma resposta incorreta para a pergunta', field : '#incorrect-'},
+    question_answer_incorrect_url: {msg : 'O formato da URL da resposta incorreta é inválido', field : '#incorrectUrl-'},
     level_title : {msg : 'Devem haver no mínimo 10 caracteres', field : '#level-title-'},
     level_min_value : {msg : 'O valor deve estar entre 0 e 100', field : '#level-percent-'},
-    level_img : {msg : 'A URL deve ter formato URL', field : '#level-img-'},
+    level_img : {msg : 'O formato da URL do level é inválido', field : '#level-img-'},
     level_text: {msg : 'Devem haver no mínimo 30 caracteres', field : '#level-description-'},
     level_min_percent: {msg : 'Devem haver pelo menos um nível com 0%', field : '#level-percent-1'},
     level_number_min: {msg : 'Devem haver pelo menos 2 níveis', field : '#min-levels'},
@@ -50,13 +50,14 @@ function prosseguirParaPerguntas() {
     imagemQuizz = document.querySelector('.nova-imagem-quizz').value;
     perguntasQuizz = Number(document.querySelector('.nova-pergunta-quizz').value);
     nivelQuizz = Number(document.querySelector('.novo-nivel-quizz').value);
+    const linker = new RegExp("^((http(s?):\/\/(www.)?[a-z]+.com\/))")
 
     if ((tituloQuizz.length >= 20 && tituloQuizz.length <= 65)) {
-        if(isValidURL(imagemQuizz)){
+        if(linker.test(imagemQuizz)){
             if(perguntasQuizz >= 3 && perguntasQuizz != NaN){
                 if(nivelQuizz >= 2){
                     //adicionar função para a criação das perguntas
-                    CreateQuestios();
+                    CreateQuestions();
                     criarQuizz.classList.add('escondido');
                     //Quando clicar no botão de "prosseguir para níveis" chamar função createLevels()
                 }else{
@@ -73,7 +74,7 @@ function prosseguirParaPerguntas() {
 }
 
 //  BEGIN Create Questions
-    function CreateQuestios(){
+    function CreateQuestions(){
         
 
         const CreateQuestions = document.querySelector('.CreateQuestions');
@@ -191,15 +192,19 @@ function prosseguirParaPerguntas() {
         let Wronganswer_image = document.querySelector(`.Q${i}`).querySelector(`.WrongURL${i}`).value;
 
         const linker = new RegExp("^((http(s?):\/\/(www.)?[a-z]+.com\/))")
-        const color = new RegExp("^((#[A-F0-9a-f]{6}\w))")
+        const color = new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);
         
         if(question_title.length > 20){ // Verifica se o a pergunta da questão tem mais de 20 caracteres
-            if(color.test(question_color)){ // Verifica se a cor foi digitada corretamente ""COM BUG""
-                if((Correctanswer_text.length > 0) && (Wronganswer_text.length > 0)){ // Verifica se foi digitado algo na resposta correta e pelo menos uma resposta errada
-                    if((linker.test(Correctanswer_image)) && (linker.test(Wronganswer_image))){ // Verifica se a url da imagem da resposta correta tem formato correto
-                        createLevels()
-                    }else{
-                        alert(msgsErrors.question_anwser_img);
+            if(color.test(question_color)){ // Verifica se a cor foi digitada corretamente
+                if((Correctanswer_text.length > 0)){ // Verifica se foi digitado algo na resposta correta
+                    if((Wronganswer_text.length > 0)){ // Verificar se  pelo menos uma resposta errada foi digitada
+                        if((linker.test(Correctanswer_image)) && (linker.test(Wronganswer_image))){ // Verifica se a url da imagem da resposta correta tem formato correto
+                            createLevels()
+                        }else{
+                            alert(msgsErrors.question_anwser_img);
+                        }
+                    }else {
+                        alert(msgsErrors.question_answer_incorrect.msg);
                     }
                 }else{
                     alert(msgsErrors.question_answer.msg);
@@ -210,25 +215,10 @@ function prosseguirParaPerguntas() {
         }else{
             alert(msgsErrors.question_title.msg);
             question_title.value = '';
-        }
-
-    }
-            
-            
-        
+        }       
+    } 
+    
 //  END Create Questions
-
-//  BEGIN Validations
-    function isValidURL(STR){
-        const re = new RegExp("^((http(s?):\/\/(www.)?[a-z]+.com\/)|(magnet:\?xt=urn:btih:))")
-        if (re.test(STR)) {
-            // alert("Valid");
-            return true
-        } else {
-            
-        }
-    }
-//  END Validatios
 
 //Colocando na tela a quantidade de níveis pedidos
 function createLevels() {
