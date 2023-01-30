@@ -24,7 +24,7 @@ const msgsErrors = {
     qtd_questions : {msg : 'Devem haver no mínimo 3 perguntas', field : '#qtd_questions'},
     qtd_levels : {msg : 'Devem haver no mínimo 2 níveis', field : '#qtd_levels'},
     question_title : {msg : 'A pergunta deve ter no mínimo 20 caracteres', field : '#question-'},
-    question_color : {msg : 'Oformato de cor é inválida', field : '#color-'},
+    question_color : {msg : 'O formato de cor é inválida', field : '#color-'},
     question_answer : {msg : 'Informe a resposta correta', field : '#answer-'},
     question_anwser_img : {msg : 'O formato da URL da resposta correta é inválido', field : '#img-'},
     question_answer_incorrect : {msg : 'Deve ter pelo menos uma resposta incorreta para a pergunta', field : '#incorrect-'},
@@ -39,21 +39,24 @@ const msgsErrors = {
 //  END Message Errors
 
 
-//Varáveis globais para serem usados nas descrições/informações do Quizz depois
+//  Varáveis globais para serem usados nas descrições/informações do Quizz depois
 let tituloQuizz = "";
 let imagemQuizz = "";
 let perguntasQuizz = 0;
 let nivelQuizz = 0;
 
+//  Informações básicas do Quizz
 function prosseguirParaPerguntas() {
     tituloQuizz = document.querySelector('.novo-titulo-quizz').value;
     imagemQuizz = document.querySelector('.nova-imagem-quizz').value;
     perguntasQuizz = Number(document.querySelector('.nova-pergunta-quizz').value);
     nivelQuizz = Number(document.querySelector('.novo-nivel-quizz').value);
+    
     const linker = new RegExp("^((http(s?):\/\/(www.)?[a-z]+.com\/))")
 
     if ((tituloQuizz.length >= 20 && tituloQuizz.length <= 65)) {
         if(linker.test(imagemQuizz)){
+            // if(true){
             if(perguntasQuizz >= 3 && perguntasQuizz != NaN){
                 if(nivelQuizz >= 2 && nivelQuizz != NaN){
                     //adicionar função para a criação das perguntas
@@ -67,16 +70,16 @@ function prosseguirParaPerguntas() {
                 alert(msgsErrors.qtd_questions.msg);
             }
         }else{
+            alert(msgsErrors.url.msg);
         }
     } else {
         alert(msgsErrors.title.msg);
     }
 }
 
+//  Perguntas do quizz
 //  BEGIN Create Questions
     function CreateQuestions(){
-        
-
         const CreateQuestions = document.querySelector('.CreateQuestions');
         CreateQuestions.classList.remove('escondido')
         let Quizz = '';
@@ -118,41 +121,51 @@ function prosseguirParaPerguntas() {
             Quizz = '';
             
         }
-        DoQuestions.innerHTML += `<button class="NextToLevels" onclick="createLevels()">Prosseguir pra criar níveis</button>`
+            DoQuestions.innerHTML += `<button class="NextToLevels" onclick="GetInfoQuizz()">Prosseguir pra criar níveis</button>`
     }
+//  END
 
-//  BEGIN
-    function GetInfoQuestions(){
-        let MyQuizz = {
-            title: tituloQuizz,
-            image: imagemQuizz,
-            questions: [],
-            levels: []
+//  BEGIN Create Levels
+    function createLevels() {
+        const CreateQuestions =document.querySelector('.CreateQuestions');
+        const CreateLevels = document.querySelector('.CreateLevels');
+            CreateQuestions.classList.add('escondido');
+            CreateLevels.classList.remove('escondido');
+            
+            let Level = '';
+            const Levels = document.querySelector('.Levels');
+        for(let i = 1; i <= nivelQuizz; i++){
+            Level =    `<div class="Level">
+                            <h3 class="LevelTitle">Nível ${i}</h3>
+                            <ion-icon class="Open" name="create-outline"></ion-icon>
+                            <input class="LevelTitle LT${i} Input" type="text" placeholder="Título do Nível    "/>
+                            <input class="LevelPercent LP${i} Input" type="text" placeholder="% de acerto mínima    "/>
+                            <input class="LevelURL LU${i} Url" type="url" placeholder="URL da imagem do nível    "/>
+                            <input class="LevelDesc LD${i} Input" type="textarea" placeholder="Descrição do nível    "/>
+                        </div>`
+
+            // console.log(Level)
+            Levels.innerHTML += Level;
+            Level = '';
         }
+        CreateLevels.innerHTML += `<button class="FinishQuizz" onclick="GetInfoLevels()">Finalizar Quizz</button>`
+    }
+//  END
+
+//  BEGIN Get informatios of Questions
+let MyQuizz = {
+    title: tituloQuizz,
+    image: imagemQuizz,
+    questions: [],
+    levels: []
+}
+    function GetInfoQuizz(){
         
         let question = {
             title: '',
             color: '',
             answers: []
         }
-
-        let level = {
-            tittle: '',
-            image: '',
-            text: '',
-            minValue: ''
-        }
-
-        for(let i = 0; i < nivelQuizz; i++){
-            level = {
-                title: arrayTitulo[i],
-                image: arrayImg[i],
-                text: arrayDescricao[i],
-                minValue: arrayPercentual[i]
-            }
-            MyQuizz.levels.push(level);
-        }
-        
         // console.log(perguntasQuizz)
         for(let i = 1; i <= perguntasQuizz; i++){
             let Correctanswer = {
@@ -166,20 +179,68 @@ function prosseguirParaPerguntas() {
                     image: '',
                     isCorrectAnswer: false
                 }
-                
-                question.title = document.querySelector(`.Q${i}`).querySelector(`.T${i}`).value;
-                question.color = document.querySelector(`.Q${i}`).querySelector(`.C${i}`).value;
+                //--Recebe e verifica se o a pergunta tem mais de 20 caracteres-----------------------------------|
+                question.title = document.querySelector(`.Q${i}`).querySelector(`.T${i}`).value;                //|
+                if(question.title.length <= 20){                                                                //|
+                    alert(msgsErrors.question_title.msg);                                                       //|
+                }                                                                                               //|
+                //------------------------------------------------------------------------------------------------|
 
-                Wronganswer.text = document.querySelector(`.Q${i}`).querySelector(`.WrongAnswer${j}`).value;
-                Wronganswer.image = document.querySelector(`.Q${i}`).querySelector(`.WrongURL${j}`).value;
+                //--Recebe e verifica se a cor foi digitada no padrão hexadecimal---------------------------------|
+                const color = new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);                                 //|
+                question.color = document.querySelector(`.Q${i}`).querySelector(`.C${i}`).value;                //|
+                if(color.test(question.color)){                                                                 //|
+                }else{                                                                                          //|
+                    alert(msgsErrors.question_color.msg);                                                       //|
+                    break;                                                                                      //|
+                }                                                                                               //|
+                //------------------------------------------------------------------------------------------------|
+
+                //--Recebe e verifica se a resposta errada foi digitada-------------------------------------------|
+                Wronganswer.text = document.querySelector(`.Q${i}`).querySelector(`.WrongAnswer${j}`).value;    //|
+                if((Wronganswer.text.length <= 0)){                                                             //|
+                    alert(msgsErrors.question_answer_incorrect.msg);                                            //|
+                    break;                                                                                      //|
+                }                                                                                               //|
+                //------------------------------------------------------------------------------------------------|
+
+                //--Recebe e verifica se a URL digitada está no padrão de URL-------------------------------------|
+                const linker = new RegExp("^((http(s?):\/\/(www.)?[a-z]+.com\/))")                              //|
+                Wronganswer.image = document.querySelector(`.Q${i}`).querySelector(`.WrongURL${j}`).value;      //|
+                if(linker.test(Wronganswer.image)){                                                             //|
+                                                                                                                //|
+                }else{                                                                                          //|
+                    alert(msgsErrors.question_anwser_img.msg);                                                  //|
+                    break;                                                                                      //|
+                }                                                                                               //|
+                //------------------------------------------------------------------------------------------------|
                 Wronganswer.isCorrectAnswer = false;
                 
-                if(Wronganswer.text !== ''){
-                    question.answers.push(Wronganswer);
-                }
+                //--Adiciona a resposta no array caso não seja nula-----------------------------------------------|
+                if(Wronganswer.text !== ''){                                                                    //|
+                    question.answers.push(Wronganswer);                                                      //|
+                }                                                                                               //|
+                //------------------------------------------------------------------------------------------------|
             }
-            Correctanswer.text = document.querySelector(`.Q${i}`).querySelector(`.CorrectAnswer`).value;
-            Correctanswer.image = document.querySelector(`.Q${i}`).querySelector(`.CorrectURL`).value;
+
+            //--Recebe e verifica se o a pergunta tem mais de 20 caracteres---------------------------------------|
+            Correctanswer.text = document.querySelector(`.Q${i}`).querySelector(`.CorrectAnswer`).value;        //|
+            if((Correctanswer.text.length <= 0)){                                                               //|
+                alert(msgsErrors.question_answer.msg);                                                          //|
+                break;                                                                                          //|
+            }                                                                                                   //|
+            //----------------------------------------------------------------------------------------------------|
+
+            //--Recebe e verifica se a URL digitada está no padrão de URL-----------------------------------------|
+            const linker = new RegExp("^((http(s?):\/\/(www.)?[a-z]+.com\/))");                                  //|
+            Correctanswer.image = document.querySelector(`.Q${i}`).querySelector(`.CorrectURL`).value;          //|
+            if(linker.test(Correctanswer.image)){                                                               //|
+                                                                                                                //|
+            }else{                                                                                              //|
+                alert(msgsErrors.question_anwser_img.msg);                                                      //|
+                break;                                                                                          //|
+            }                                                                                                   //|
+            //----------------------------------------------------------------------------------------------------|
             Correctanswer.isCorrectAnswer = true;
 
             if(Correctanswer.text !== ''){
@@ -193,65 +254,67 @@ function prosseguirParaPerguntas() {
                 answers: []
             }
         }
-        // console.log(MyQuizz);
-        VerifyQuestions(MyQuizz)
+
         // return MyQuizz;
+        if(MyQuizz.questions.length >= 3){
+            // console.log(MyQuizz);
+            createLevels();
+        }
+    }
+//  END Get informatios of Questions
+
+
+function GetInfoLevels(){
+    let level = {
+        title: '',
+        image: '',
+        text: '',
+        minValue: ''
     }
 
-//  END
-
-    function VerifyQuestions(Data){
-        let question_title = document.querySelector(`.Q${i}`).querySelector(`.T${i}`).value;
-        let question_color = document.querySelector(`.Q${i}`).querySelector(`.C${i}`).value;
-        let Correctanswer_text = document.querySelector(`.Q${i}`).querySelector(`.CorrectAnswer`).value;
-        let Correctanswer_image = document.querySelector(`.Q${i}`).querySelector(`.CorrectURL`).value;
-        let Wronganswer_text = document.querySelector(`.Q${i}`).querySelector(`.WrongAnswer${i}`).value;
-        let Wronganswer_image = document.querySelector(`.Q${i}`).querySelector(`.WrongURL${i}`).value;
-
-        const linker = new RegExp("^((http(s?):\/\/(www.)?[a-z]+.com\/))")
-        const color = new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);
-        
-        if(question_title.length > 20){ // Verifica se o a pergunta da questão tem mais de 20 caracteres
-            if(color.test(question_color)){ // Verifica se a cor foi digitada corretamente
-                if((Correctanswer_text.length > 0)){ // Verifica se foi digitado algo na resposta correta
-                    if((Wronganswer_text.length > 0)){ // Verificar se  pelo menos uma resposta errada foi digitada
-                        if((linker.test(Correctanswer_image)) && (linker.test(Wronganswer_image))){ // Verifica se a url da imagem da resposta correta tem formato correto
-                            createLevels()
+    for(let i = 1; i <= nivelQuizz; i++){
+            level.title = document.querySelector(`.LT${i}`).value;
+            level.image = document.querySelector(`.LU${i}`).value;
+            level.text = document.querySelector(`.LD${i}`).value;
+            level.minValue = document.querySelector(`.LP${i}`).value;
+            
+            const linker = new RegExp("^((http(s?):\/\/(www.)?[a-z]+.com\/))");
+            if (level.title.length >= 10) {
+                if(level.minValue >= 0 && level.minValue <= 100){
+                    if(linker.test(level.image)){
+                        if(level.text.length >= 30){
+                            if(MyQuizz.title !== ''){
+                                MyQuizz.levels.push(level);
+                                sendQuizz();
+                            }else{
+                                alert('Verifique os dados digitados.')
+                            }
                         }else{
-                            alert(msgsErrors.question_anwser_img);
+                            alert(msgsErrors.level_text.msg);
                         }
-                    }else {
-                        alert(msgsErrors.question_answer_incorrect.msg);
+                    }else{
+                        alert(msgsErrors.level_img.msg)
                     }
                 }else{
-                    alert(msgsErrors.question_answer.msg);
+                    alert(msgsErrors.level_min_value.msg)
                 }
             }else{
-                alert(msgsErrors.question_color.msg);
+                alert(msgsErrors.level_title.msg)
             }
-        }else{
-            alert(msgsErrors.question_title.msg);
-            question_title.value = '';
-        }       
-    } 
-    
-//  END Create Questions
 
-//Colocando na tela a quantidade de níveis pedidos
-function createLevels() {
-    GetInfoQuestions()
-    const searchNiveis = document.querySelector('.niveis');
-
-    for (let i = 2; i <= nivelQuizz; i++) {
-        let template = `<div class="proximo-nivel">
-            <h3>Nível ${i}</h3>
-            <img src="img/Vector (2).png" onclick="openNextLevel()">
-        </div>`;
-
-        searchNiveis.innerHTML = searchNiveis.innerHTML + template;
+            level = {
+                title: '',
+                image: '',
+                text: '',
+                minValue: ''
+        }
     }
+    MyQuizz.title = document.querySelector('.novo-titulo-quizz').value;
+    MyQuizz.image = document.querySelector('.nova-imagem-quizz').value;
+    console.log(MyQuizz);
 }
-//Fim dos niveis pedidos
+
+
 // Clicando no icone do lápis e abrindo os inputs para informação dos níveis
 let i = 2;
 function openNextLevel() {
@@ -272,87 +335,30 @@ function openNextLevel() {
 }
 //Fim dos inputs dos niveis
 
-// Validação de dados colocados nos inputs do quizz
-let tituloNivel = "";
-let percentualNivel = 0;
-let imagemNivel = "";
-let descricaoNivel = "";
-let arrayTitulo = [];
-let arrayPercentual = [];
-let arrayImg = [];
-let arrayDescricao = [];
-
-function proceedToFinishQuizz() {
-    let contador = 0;
-    for(let indice = 1; indice <= nivelQuizz; indice++){
-        tituloNivel = document.querySelector(`.titulo-nivel-${indice}`).value;
-        percentualNivel = Number(document.querySelector(`.acerto-nivel-${indice}`).value);
-        imagemNivel = document.querySelector(`.img-nivel-${indice}`).value;
-        descricaoNivel = document.querySelector(`.descricao-nivel-${indice}`).value;
-
-        if (tituloNivel.length >= 10) {
-            if(percentualNivel >= 0 && percentualNivel <= 100){
-                if(isValidURL === true){
-                    if(descricaoNivel.length >= 30){
-                        contador += 1;
-                        arrayTitulo.push(tituloNivel);
-                        arrayPercentual.push(percentualNivel)
-                        arrayImg.push(imagemNivel); 
-                        arrayDescricao.push(descricaoNivel);
-                    }else{
-                        contador = 0;
-                        alert(msgsErrors.level_text.msg);
-                    }
-                }else{
-                    contador = 0;
-                    alert(msgsErrors.url.msg);
-                }
-            }else{
-                contador = 0;
-                alert(msgsErrors.level_min_value.msg);
-            }
-        } else {
-            contador = 0;
-            alert(msgsErrors.level_title.msg);
-        }
-    }
-    for(let i = 0; i < arrayPercentual.length; i++){
-        if (arrayPercentual[i] !== 0){
-            contador = 0;
-            alert(msgsErrors.level_min_percent.msg);
-        }
-    }
-    if(contador === nivelQuizz){
-        //Função para criar quizz do usuário
-        sendQuizz();
-    }
-}
-//Fim da validação
-
 //Funcção de envio do quizz do usuário
 function sendQuizz(){
 
-    const functionSend = GetInfoQuestions();
-
-    const send = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', functionSend);
+    let documento = ser
+    const send = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', MyQuizz);
     send.then(FinishQuizz);
     send.catch(GetError);
 }
 //Inicio Da Func para finalizar quizz
 const showYourQuizz = document.querySelector('.tela11-info-quizz');
 
-function FinishQuizz(){ 
-    const closeLevel = document.querySelector('.tela3-niveis');
-    closeLevel.classList.add('escondido');
-    const quizzFinish = document.querySelector('.tela11');
-    quizzFinish.classList.remove('escondido');
+function FinishQuizz(response){
+    console.log(response.data)
+    // const closeLevel = document.querySelector('.tela3-niveis');
+    // closeLevel.classList.add('escondido');
+    // const quizzFinish = document.querySelector('.tela11');
+    // quizzFinish.classList.remove('escondido');
 
-    let template3 = `<div>
-    <img src="${imagemQuizz}" alt="Imagem do Quizz">
-    <h4>${tituloQuizz}</h4>
-    </div>`;
+    // let template3 = `<div>
+    // <img src="${imagemQuizz}" alt="Imagem do Quizz">
+    // <h4>${tituloQuizz}</h4>
+    // </div>`;
 
-    showYourQuizz.innerHTML = showYourQuizz.innerHTML + template3;
+    // showYourQuizz.innerHTML = showYourQuizz.innerHTML + template3;
 }
 
 //Fim do finalizar quizz
@@ -504,10 +510,4 @@ return arr;
 //  BEGIN
 //  END
 
-
-
-
-
-
-
-
+    
