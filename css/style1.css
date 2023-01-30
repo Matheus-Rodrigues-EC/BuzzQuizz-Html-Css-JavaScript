@@ -72,10 +72,11 @@ body {
     margin-top: 20px;
 }
 .tela1-com-quizz{
-    width: 1081px;
+    width: 1050px;
     margin: 0 auto;
     margin-top: 70px;
     display: flex;
+    flex-direction: column;
 }
 .tela1-com-quizz h2 {
     color: #000000;
@@ -96,10 +97,37 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+
+    position: absolute;
+    top: 135px;
+    left: 345px;
 }
 .tela1-com-quizz button img {
     width: 13px;
-    height: auto;
+    height: 13px;
+}
+.quizzes-criados {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+
+    position: relative;
+}
+.quizzes-criados img {
+    width: 340px;
+    height: 181px;
+    border-radius: 5px;
+}
+.quizzes-criados h3 {
+    color: rgba(255, 255, 255, 1);
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 23px;
+
+    position: absolute;
+    top: 147px;
+    left: 17px;
 }
 .escondido {
     display: none;
@@ -343,43 +371,4 @@ body {
     border: 1px solid rgba(255, 255, 255, 1);
     margin: 75px auto 30px auto;
 }
-/*---END Questions My Quizz---*/
-
-/*---BEGIN Levels My Quizz---*/
-.CreateLevels{
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-}
-.LevelsTitle{
-    font-family: "Roboto", sans-serif;
-    font-size: 23px;
-    font-weight: 700;
-    color: #000000;
-    margin: 63px auto 19px auto;
-}
-
-.Level{
-    width: 600px;
-    padding: 20px;
-    background-color: #FFFFFF;
-    margin: 24px auto;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
-    border: none;
-    justify-content: space-around;
-    position: relative;
-}
-
-.LevelTitle{
-    font-family: "Roboto", sans-serif;
-    font-size: 23px;
-    font-weight: 700;
-    color: #000000;
-    margin: 27px auto 12px auto;
-}
-.Open{
-    position: absolute;
-    right: 10%;
-    top: 20px;
-}
-/*---END Levels My Quizz---*/
+/*---BEGIN Questions My Quizz---*/

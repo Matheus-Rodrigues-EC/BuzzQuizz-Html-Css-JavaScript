@@ -337,9 +337,9 @@ function openNextLevel() {
 
 //Funcção de envio do quizz do usuário
 function sendQuizz(){
-
     let documento = ser
     const send = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', MyQuizz);
+
     send.then(FinishQuizz);
     send.catch(GetError);
 }
@@ -370,13 +370,19 @@ function backHome(){
     const inicio = document.querySelector('.tela1-com-quizz');
     const nameList2 = document.querySelector('.NameList');
     const listQuizz2 = document.querySelector('.ListQuizzes');
+    const YourQuizz = document.querySelector('.quizzes-criados');
 
     fim.classList.add('escondido');
     inicio.classList.remove('escondido');
     nameList2.classList.remove('escondido');
     listQuizz2.classList.remove('escondido');
 
-    //Atualizar para colocar quizz listado do usuário
+    let template4 = `<div>
+    <img src="${imagemQuizz}" alt="Imagem do Quizz">
+    <h4>${tituloQuizz}</h4>
+    </div>`;
+
+    YourQuizz.innerHTML = YourQuizz.innerHTML + template4;
     
 }
 // Fim do botão de voltar
@@ -394,7 +400,7 @@ const ListAll =  document.querySelector('.ListAll');
 
 //  BEGIN Get Errors
 function GetError(error){
-    console.log(error.response.status )
+    console.log(error.response.status)
 }
 //  END Get Errors
 
@@ -414,7 +420,7 @@ function SerializeQuizzes(response){
 
 //  BEGIN Load Quizzes
     function LoadQuizzes(response){
-        // console.log(response.data);
+        //console.log(response.data);
         AllQuizzesUnSerializabled = localStorage.getItem('AllQuizzes')
         let ListQuizzes = JSON.parse(AllQuizzesUnSerializabled);
         let Quizz = '';
@@ -473,6 +479,7 @@ return arr;
                 let Questions = ListQuizzes[i].questions;
                 // console.log(Questions)
                 quizz.classList.add('escondido');
+                quizz2.classList.add('escondido');
                 ListAll.classList.add('escondido');
                 Tela2.classList.remove('escondido');
 
@@ -489,12 +496,12 @@ return arr;
                                             <div class="QuestionTitleBox">
                                                 <h3 class="QuestionTitle">${Questions[j].title}</h3>
                                             </div>
-                                            <div class="AnswersBox AnswersBox${j}">
+                                            <div class="AnswersBox${j} AnswersBox">
                                             </div>
                                         </div>`
                     let AnswersBox = document.querySelector(`.AnswersBox${j}`);
                     for(let k = 0; k < Answers.length; k++){
-                        AnswersBox.innerHTML += `<div class="Answer">
+                        AnswersBox.innerHTML += `<div onclick = "SelectedAnswers(this)" class="Answer">
                                                     <img class="AnswersImage" src="${Answers[k].image}">
                                                     <h5 class="AnswersText">${Answers[k].text}</h5>
                                                 </div` 
@@ -504,6 +511,33 @@ return arr;
         }
     }
 //  END Open Quizz Selected
+
+// Comportamente das respostas
+let x = 0;
+function SelectedAnswers(click){
+    click.classList.add('clicado');
+    let response = document.querySelectorAll(`.AnswersBox${x} .Answer`);
+    for(let j = 0; j < response.length; j++){
+        if(response[j].classList.contains('clicado') !== null){
+            response[j].classList.add('otherAnswers');
+            click.classList.remove('otherAnswers');
+            setTimeout(scrollarQuestions, 2000);
+        }
+        if(AllQuizzesSerializabled.isCorrectAnswer === true){
+            response[j].classList.add('correctAnswer');
+        } else {
+            response[j].classList.add('wrongAnswers');
+        }
+    }
+    x += 1;
+    if(x === perguntasQuizz){
+        //Adicionar finalização do quizz
+    }
+}
+
+function scrollarQuestions(){
+    window.scroll(0, 900);
+}
 
 //---------------------------------------------------------------------------------------------------------
 
