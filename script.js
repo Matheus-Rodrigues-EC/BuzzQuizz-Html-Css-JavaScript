@@ -362,13 +362,19 @@ function backHome(){
     const inicio = document.querySelector('.tela1-com-quizz');
     const nameList2 = document.querySelector('.NameList');
     const listQuizz2 = document.querySelector('.ListQuizzes');
+    const YourQuizz = document.querySelector('.quizzes-criados');
 
     fim.classList.add('escondido');
     inicio.classList.remove('escondido');
     nameList2.classList.remove('escondido');
     listQuizz2.classList.remove('escondido');
 
-    //Atualizar para colocar quizz listado do usuário
+    let template4 = `<div>
+    <img src="${imagemQuizz}" alt="Imagem do Quizz">
+    <h4>${tituloQuizz}</h4>
+    </div>`;
+
+    YourQuizz.innerHTML = YourQuizz.innerHTML + template4;
     
 }
 // Fim do botão de voltar
@@ -465,6 +471,7 @@ return arr;
                 let Questions = ListQuizzes[i].questions;
                 // console.log(Questions)
                 quizz.classList.add('escondido');
+                quizz2.classList.add('escondido');
                 ListAll.classList.add('escondido');
                 Tela2.classList.remove('escondido');
 
@@ -519,7 +526,6 @@ function SelectedAnswers(click){
         //Adicionar finalização do quizz
     }
 }
-
 
 function scrollarQuestions(){
     window.scroll(0, 900);
