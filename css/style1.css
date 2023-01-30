@@ -344,3 +344,15 @@ body {
     margin: 75px auto 30px auto;
 }
 /*---BEGIN Questions My Quizz---*/
+
+.otherAnswers {
+    opacity: 0.3;
+}
+
+.correctAnswer {
+    color: rgba(0, 156, 34, 1);
+}
+
+.wrongAnswers {
+    color: rgba(255, 75, 75, 1);
+}
