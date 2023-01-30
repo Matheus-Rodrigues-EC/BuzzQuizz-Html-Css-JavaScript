@@ -5,6 +5,17 @@ const quizz2 = document.querySelector('.tela1-com-quizz');
 const nameList = document.querySelector('.NameList');
 const listQuizz = document.querySelector('.ListAll');
 
+//  BEGIN Variables
+const URL_API = 'https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/'
+const ListAllQuizzes = document.querySelector('.ListQuizzes');
+let   ID = 0;
+let AllQuizzesSerializabled;
+let AllQuizzesUnSerializabled;
+let MyQuizzesSerializabled;
+let MyQuizzesUnSerializabled;
+const ListAll =  document.querySelector('.ListAll');
+//  END Variables
+
 function criarMeuQuizz() {
     quizz.classList.add('escondido');
 
@@ -52,7 +63,7 @@ function prosseguirParaPerguntas() {
     perguntasQuizz = Number(document.querySelector('.nova-pergunta-quizz').value);
     nivelQuizz = Number(document.querySelector('.novo-nivel-quizz').value);
     
-    const linker = new RegExp("^((http(s?):\/\/(www.)?[a-z]+.com\/))")
+    const linker = new RegExp("((http(s?):\/\/(www.)?[a-z0-9A-Z]*.[a-z]*.([a-z]?)*\/?)...*)")
 
     if ((tituloQuizz.length >= 20 && tituloQuizz.length <= 65)) {
         if(linker.test(imagemQuizz)){
@@ -138,7 +149,7 @@ function prosseguirParaPerguntas() {
             Level =    `<div class="Level">
                             <h3 class="LevelTitle">Nível ${i}</h3>
                             <ion-icon class="Open" name="create-outline"></ion-icon>
-                            <input class="LevelTitle LT${i} Input" type="text" placeholder="Título do Nível    "/>
+                            <input class="LevelTitleName LT${i} Input" type="text" placeholder="Título do Nível    "/>
                             <input class="LevelPercent LP${i} Input" type="text" placeholder="% de acerto mínima    "/>
                             <input class="LevelURL LU${i} Url" type="url" placeholder="URL da imagem do nível    "/>
                             <input class="LevelDesc LD${i} Input" type="textarea" placeholder="Descrição do nível    "/>
@@ -187,7 +198,7 @@ let MyQuizz = {
                 //------------------------------------------------------------------------------------------------|
 
                 //--Recebe e verifica se a cor foi digitada no padrão hexadecimal---------------------------------|
-                const color = new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);                                 //|
+                const color = new RegExp("(#[a-f0-9A-F]{3,6})");                                 //|
                 question.color = document.querySelector(`.Q${i}`).querySelector(`.C${i}`).value;                //|
                 if(color.test(question.color)){                                                                 //|
                 }else{                                                                                          //|
@@ -205,7 +216,7 @@ let MyQuizz = {
                 //------------------------------------------------------------------------------------------------|
 
                 //--Recebe e verifica se a URL digitada está no padrão de URL-------------------------------------|
-                const linker = new RegExp("^((http(s?):\/\/(www.)?[a-z]+.com\/))")                              //|
+                const linker = new RegExp("((http(s?):\/\/(www.)?[a-z0-9A-Z]*.[a-z]*.([a-z]?)*\/?)...*)")                              //|
                 Wronganswer.image = document.querySelector(`.Q${i}`).querySelector(`.WrongURL${j}`).value;      //|
                 if(linker.test(Wronganswer.image)){                                                             //|
                                                                                                                 //|
@@ -232,7 +243,7 @@ let MyQuizz = {
             //----------------------------------------------------------------------------------------------------|
 
             //--Recebe e verifica se a URL digitada está no padrão de URL-----------------------------------------|
-            const linker = new RegExp("^((http(s?):\/\/(www.)?[a-z]+.com\/))");                                  //|
+            const linker = new RegExp("((http(s?):\/\/(www.)?[a-z0-9A-Z]*.[a-z]*.([a-z]?)*\/?)...*)");                                  //|
             Correctanswer.image = document.querySelector(`.Q${i}`).querySelector(`.CorrectURL`).value;          //|
             if(linker.test(Correctanswer.image)){                                                               //|
                                                                                                                 //|
@@ -278,16 +289,13 @@ function GetInfoLevels(){
             level.text = document.querySelector(`.LD${i}`).value;
             level.minValue = document.querySelector(`.LP${i}`).value;
             
-            const linker = new RegExp("^((http(s?):\/\/(www.)?[a-z]+.com\/))");
+            const linker = new RegExp("((http(s?):\/\/(www.)?[a-z0-9A-Z]*.[a-z]*.([a-z]?)*\/?)...*)");
             if (level.title.length >= 10) {
                 if(level.minValue >= 0 && level.minValue <= 100){
                     if(linker.test(level.image)){
                         if(level.text.length >= 30){
-                            if(MyQuizz.title !== ''){
+                            if(MyQuizz.levels.length < nivelQuizz){
                                 MyQuizz.levels.push(level);
-                                sendQuizz();
-                            }else{
-                                alert('Verifique os dados digitados.')
                             }
                         }else{
                             alert(msgsErrors.level_text.msg);
@@ -311,7 +319,12 @@ function GetInfoLevels(){
     }
     MyQuizz.title = document.querySelector('.novo-titulo-quizz').value;
     MyQuizz.image = document.querySelector('.nova-imagem-quizz').value;
-    console.log(MyQuizz);
+    
+    console.log(MyQuizz.levels.length)
+    if(MyQuizz.levels.length >= 2){
+        console.log(MyQuizz);
+        sendQuizz();
+    }
 }
 
 
@@ -337,7 +350,7 @@ function openNextLevel() {
 
 //Funcção de envio do quizz do usuário
 function sendQuizz(){
-    let documento = ser
+
     const send = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', MyQuizz);
 
     send.then(FinishQuizz);
@@ -386,17 +399,6 @@ function backHome(){
     
 }
 // Fim do botão de voltar
-
-//  BEGIN Variables
-const URL_API = 'https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/'
-const ListAllQuizzes = document.querySelector('.ListQuizzes');
-let   ID = 0;
-let AllQuizzesSerializabled;
-let AllQuizzesUnSerializabled;
-let MyQuizzesSerializabled;
-let MyQuizzesUnSerializabled;
-const ListAll =  document.querySelector('.ListAll');
-//  END Variables
 
 //  BEGIN Get Errors
 function GetError(error){

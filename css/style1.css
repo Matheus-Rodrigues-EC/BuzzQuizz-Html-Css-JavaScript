@@ -322,6 +322,7 @@ body {
 .Question, .CorrectAnswers, .Wrong{
     display: flex;
     flex-direction: column;align-items: center;
+    padding: 0 20px;
 }
 
 .MyQuestionTitle{
@@ -337,7 +338,7 @@ body {
 }
 
 .Input, .Url, .Color{
-    width: 564px;
+    width: 100%;
     height: 46px;
     color: #000000;
     border: 1px solid #D1D1D1;
@@ -372,3 +373,42 @@ body {
     margin: 75px auto 30px auto;
 }
 /*---BEGIN Questions My Quizz---*/
+
+.CreateLevels{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+.LevelsTitle{
+    font-family: "Roboto", sans-serif;
+    font-size: 23px;
+    font-weight: 700;
+    color: #000000;
+    margin: 63px 0 43px 15px;
+    text-align: center;
+}
+
+.Level{
+    width: 600px;
+    margin: 25px auto;
+    background-color: #FFFFFF;
+    padding: 17px;
+    position: relative;
+}
+
+.LevelTitle{
+    font-family: "Roboto", sans-serif;
+    font-size: 23px;
+    font-weight: 700;
+    color: #000000;
+    margin: 14px auto 15px 0;
+}
+
+.Open{
+    position: absolute;
+    top: 25px;
+    right: 20px;
+    width: 26px;
+    height: 26px;
+}
